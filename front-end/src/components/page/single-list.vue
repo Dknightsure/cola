@@ -49,7 +49,6 @@
 </style>
 <template>
     <div class="layout">
-        <!-- <paper-car></paper-car> -->
         <Row type="flex">
             <i-col span="5" class="layout-menu-left">
               <left-nav activeName="q-single-list" :openName="['question']"></left-nav>
@@ -82,7 +81,6 @@
 <script>
 import LeftNav from '../sub/left-nav'
 import SingleQuery from '../sub/single-query'
-// import PaperCar from '../sub/paper-car'
 
 export default {
   data () {
@@ -111,8 +109,7 @@ export default {
 
   components: {
     LeftNav,
-    SingleQuery,
-    // PaperCar
+    SingleQuery
   }
 }
 </script>

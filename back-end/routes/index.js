@@ -23,20 +23,23 @@ var SingleQuestionSchema = new mongoose.Schema({
   title: { type: String },
   selections: [SelectionSchema],
   answer: { type: Number },
-  difficulty: { type: Number }
+  difficulty: { type: Number },
+  type: { type: String }
 });
 
 var MutipleQuestionSchema = new mongoose.Schema({
   title: { type: String },
   selections: [SelectionSchema],
   answer: { type: Array },
-  difficulty: { type: Number }
+  difficulty: { type: Number },
+  type: { type: String }
 });
 
 var BlankQuestionSchema = new mongoose.Schema({
   title: { type: String },
   selections: [SelectionSchema],
-  difficulty: { type: Number }
+  difficulty: { type: Number },
+  type: { type: String }
 });
 
 var PaperSchema = new mongoose.Schema({
@@ -145,7 +148,8 @@ router.post('/api/add-single-question', function (req, res, next) {
     title: req.body.title,
     selections: req.body.selections,
     answer: req.body.answer,
-    difficulty: req.body.difficulty
+    difficulty: req.body.difficulty,
+    type: 'single'
   });
 
   question.save(function (err, ques) {
@@ -163,7 +167,8 @@ router.post('/api/add-mutiple-question', function (req, res, next) {
     title: req.body.title,
     selections: req.body.selections,
     answer: req.body.answer,
-    difficulty: req.body.difficulty
+    difficulty: req.body.difficulty,
+    type: 'mutiple'
   });
 
   question.save(function (err, ques) {
@@ -180,7 +185,8 @@ router.post('/api/add-blank-question', function (req, res, next) {
   var question = new BlankQuestionModel({
     title: req.body.title,
     selections: req.body.selections,
-    difficulty: req.body.difficulty
+    difficulty: req.body.difficulty,
+    type: 'blank'
   });
 
   question.save(function (err, ques) {
