@@ -14,4 +14,14 @@ SingleIO.prototype.addSignle = function (data) {
   })
 }
 
+SingleIO.prototype.getList = function (params) {
+  let obj = this.api.getSingleList;
+
+  return this.axios({
+    method: obj.method,
+    url: obj.url,
+    params: params
+  })
+}
+
 export default SingleIO

@@ -14,4 +14,14 @@ BlankIO.prototype.addBlank = function (data) {
   })
 }
 
+BlankIO.prototype.getList = function (params) {
+  let obj = this.api.getBlankList;
+
+  return this.axios({
+    method: obj.method,
+    url: obj.url,
+    params: params
+  })
+}
+
 export default BlankIO

@@ -66,9 +66,7 @@
                 </div>
                 <div class="layout-content">
                     <div class="layout-content-main">
-                      <mutiple-query :question="question"></mutiple-query>
-                      <mutiple-query :question="question"></mutiple-query>
-                      <mutiple-query :question="question"></mutiple-query>
+                      <mutiple-query v-for="(question, index) in questions" :question="question" :key="index"></mutiple-query>
                     </div>
                 </div>
                 <div class="layout-copy">
@@ -81,29 +79,27 @@
 <script>
 import LeftNav from '../sub/left-nav'
 import MutipleQuery from '../sub/mutiple-query'
+import MutipleIO from '../../io/MutipleIO'
 
 export default {
   data () {
     return {
-      question: {
-        title: '下列哪几个城市属于直辖市？',
-        difficulty: 2.5,
-        answer: [0, 1],
-        selections: [
-          {
-            title: '北京'
-          },
-          {
-            title: '上海'
-          },
-          {
-            title: '广州'
-          },
-          {
-            title: '深圳'
-          }
-        ],
-      }
+      questions: []
+    }
+  },
+
+  mounted () {
+    this.fetchData()
+  },
+
+  methods: {
+    fetchData () {
+      var self = this;
+      new MutipleIO().getList().then(res => {
+        self.questions = res.data;
+      }).catch(err => {
+        console.log(err);
+      })
     }
   },
 

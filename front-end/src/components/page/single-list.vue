@@ -66,9 +66,7 @@
                 </div>
                 <div class="layout-content">
                     <div class="layout-content-main">
-                      <single-query :question="question" class="question"></single-query>
-                      <single-query :question="question" class="question"></single-query>
-                      <single-query :question="question" class="question"></single-query>
+                      <single-query v-for="(question, index) in questions" :question="question" :key="index" class="question"></single-query>
                     </div>
                 </div>
                 <div class="layout-copy">
@@ -81,29 +79,27 @@
 <script>
 import LeftNav from '../sub/left-nav'
 import SingleQuery from '../sub/single-query'
+import SingleIO from '../../io/SingleIO'
 
 export default {
   data () {
     return {
-      question: {
-        title: '中国的首都是哪个城市？',
-        difficulty: 2.5,
-        answer: 0,
-        selections: [
-          {
-            title: '北京'
-          },
-          {
-            title: '上海'
-          },
-          {
-            title: '广州'
-          },
-          {
-            title: '深圳'
-          }
-        ],
-      }
+      questions: []
+    }
+  },
+
+  mounted () {
+    this.fetchData()
+  },
+
+  methods: {
+    fetchData () {
+      var self = this;
+      new SingleIO().getList().then(res => {
+        self.questions = res.data;
+      }).catch(err => {
+        console.log(err);
+      })
     }
   },
 

@@ -16,5 +16,20 @@ export default {
   addBlank: {
     url: '/api/add-blank-question',
     method: 'POST'
+  },
+
+  getSingleList: {
+    url: '/api/query-single-question',
+    method: 'GET'
+  },
+
+  getMutipleList: {
+    url: '/api/query-mutiple-question',
+    method: 'GET'
+  },
+
+  getBlankList: {
+    url: '/api/query-blank-question',
+    method: 'GET'
   }
 }

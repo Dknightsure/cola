@@ -66,9 +66,7 @@
                 </div>
                 <div class="layout-content">
                     <div class="layout-content-main">
-                      <blank-query :question="question"></blank-query>
-                      <blank-query :question="question"></blank-query>
-                      <blank-query :question="question"></blank-query>
+                      <blank-query v-for="(question, index) in questions" :question="question" :key="index"></blank-query>
                     </div>
                 </div>
                 <div class="layout-copy">
@@ -81,22 +79,27 @@
 <script>
 import LeftNav from '../sub/left-nav'
 import BlankQuery from '../sub/blank-query'
+import BlankIO from '../../io/BlankIO'
 
 export default {
   data () {
     return {
-      question: {
-        title: '中国有____个民族，____是最大的民族',
-        difficulty: 2.5,
-        selections: [
-          {
-            title: '56'
-          },
-          {
-            title: '汉'
-          }
-        ],
-      }
+      questions: []
+    }
+  },
+
+  mounted () {
+    this.fetchData()
+  },
+
+  methods: {
+    fetchData () {
+      var self = this;
+      new BlankIO().getList().then(res => {
+        self.questions = res.data;
+      }).catch(err => {
+        console.log(err);
+      })
     }
   },
 

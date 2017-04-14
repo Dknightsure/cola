@@ -14,4 +14,14 @@ MutipleIO.prototype.addMutiple = function (data) {
   })
 }
 
+MutipleIO.prototype.getList = function (params) {
+  let obj = this.api.getMutipleList;
+
+  return this.axios({
+    method: obj.method,
+    url: obj.url,
+    params: params
+  })
+}
+
 export default MutipleIO
