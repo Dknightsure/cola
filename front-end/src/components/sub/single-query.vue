@@ -46,7 +46,7 @@
           <Form-item>
               <Button type="primary">修改</Button>
               <Button type="error" style="margin-left: 8px">删除</Button>
-              <Button type="success" style="margin-left: 30px">加入试卷</Button>
+              <Button type="success" style="margin-left: 30px" @click="addQuestionToPaper">加入试卷</Button>
           </Form-item>
         </Form>
       </Card>
@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import Bus from '../bus'
 
 export default {
   data () {
@@ -66,7 +67,9 @@ export default {
   props: ['question'],
 
   methods: {
-
+    addQuestionToPaper () {
+      Bus.$emit('addQuestionToPaper', this.question)
+    }
   }
 }
 </script>

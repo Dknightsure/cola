@@ -67,50 +67,42 @@
   <div class="container">
     <Input placeholder="试卷标题..." style="width: 300px"></Input>
     <ul>
-      <li>
-        aasdfasdfasdfasdfasdf
-        <div>
-          <Icon type="trash-a" color="#ff0000" size="20" class="icon-delete"></Icon>
-        </div>
-      </li>
-      <li>
-        aasdfasdfasdfasdfasdf
-        <div>
-          <Icon type="trash-a" color="#ff0000" size="20" class="icon-delete"></Icon>
-        </div>
-      </li>
-      <li>
-        aasdfasdfasdfasdfasdf
-        <div>
-          <Icon type="trash-a" color="#ff0000" size="20" class="icon-delete"></Icon>
-        </div>
-      </li>
-      <li>
-        aasdfasdfasdfasdfasdf
-        <div>
-          <Icon type="trash-a" color="#ff0000" size="20" class="icon-delete"></Icon>
-        </div>
-      </li>
-      <li>
-        aasdfasdfasdfasdfasdf
-        <div>
+      <li v-for="(question, index) in questions">
+        {{ question.title }}
+        <div @click="deleteQuestion(index)">
           <Icon type="trash-a" color="#ff0000" size="20" class="icon-delete"></Icon>
         </div>
       </li>
     </ul>
-    <h1>试卷试题数：100<Button type="primary" class="submit-paper">发布试卷</Button></h1>
+    <h1>试卷试题数：{{ questions.length }}<Button type="primary" class="submit-paper">发布试卷</Button></h1>
   </div>
 </template>
 
 <script>
+import Bus from '../bus'
 
 export default {
   data () {
     return {
+      questions: []
     }
   },
 
+  mounted () {
+    this.listenAddQuestion();
+  },
+
   methods: {
+    listenAddQuestion () {
+      const self = this;
+      Bus.$on('addQuestionToPaper', (question) => {
+        self.questions.push(question);
+      })
+    },
+
+    deleteQuestion (index) {
+      this.questions.splice(index, 1);
+    }
   }
 }
 </script>
