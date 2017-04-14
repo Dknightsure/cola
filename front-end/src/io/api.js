@@ -31,5 +31,10 @@ export default {
   getBlankList: {
     url: '/api/query-blank-question',
     method: 'GET'
+  },
+
+  addPaper: {
+    url: '/api/add-paper',
+    method: 'POST'
   }
 }

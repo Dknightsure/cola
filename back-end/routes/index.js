@@ -236,15 +236,13 @@ router.post('/api/remove-blank-question', function (req, res, next) {
 });
 
 router.post('/api/add-paper', function (req, res, next) {
-  var paper_data = JSON.parse(req.body.paper);
-
   var paper = new PaperModel({
-    name: paper_data.name
+    name: req.body.name
   });
 
   //添加单选
-  for (var i = 0; i < paper_data.singleQuestions.length; i++) {
-    var q = paper_data.singleQuestions[i];
+  for (var i = 0; i < req.body.singleQuestions.length; i++) {
+    var q = req.body.singleQuestions[i];
     var question = {
       title: q.title,
       selections: q.selections,
@@ -255,8 +253,8 @@ router.post('/api/add-paper', function (req, res, next) {
   }
 
   //添加多选
-  for (var j = 0; j < paper_data.mutipleQuestions.length; j++) {
-    var q = paper_data.mutipleQuestions[j];
+  for (var j = 0; j < req.body.mutipleQuestions.length; j++) {
+    var q = req.body.mutipleQuestions[j];
     var question = {
       title: q.title,
       selections: q.selections,
@@ -267,8 +265,8 @@ router.post('/api/add-paper', function (req, res, next) {
   }
 
   //添加填空
-  for (var k = 0; k < paper_data.blankQuestions.length; k++) {
-    var q = paper_data.blankQuestions[k];
+  for (var k = 0; k < req.body.blankQuestions.length; k++) {
+    var q = req.body.blankQuestions[k];
     var question = {
       title: q.title,
       answer: q.answer,

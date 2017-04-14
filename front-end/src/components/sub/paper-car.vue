@@ -2,7 +2,7 @@
 .container {
   position: fixed;
   width: 300px;
-  left: 500px;
+  left: 25%;
   bottom: 20px;
   z-index: 100;
 
@@ -44,6 +44,9 @@
       padding: 0 20px;
       border-bottom: 1px dotted #657180;
       position: relative;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .icon-delete {
@@ -65,7 +68,7 @@
 </style>
 <template>
   <div class="container">
-    <Input placeholder="试卷标题..." style="width: 300px"></Input>
+    <Input v-model="name" placeholder="试卷标题..." style="width: 300px"></Input>
     <ul>
       <li v-for="(question, index) in questions">
         {{ question.title }}
@@ -74,16 +77,18 @@
         </div>
       </li>
     </ul>
-    <h1>试卷试题数：{{ questions.length }}<Button type="primary" class="submit-paper">发布试卷</Button></h1>
+    <h1>试卷试题数：{{ questions.length }}<Button type="primary" class="submit-paper" @click="submitPaper">发布试卷</Button></h1>
   </div>
 </template>
 
 <script>
 import Bus from '../bus'
+import PaperIO from '../../io/PaperIO'
 
 export default {
   data () {
     return {
+      name: '',
       questions: []
     }
   },
@@ -102,6 +107,39 @@ export default {
 
     deleteQuestion (index) {
       this.questions.splice(index, 1);
+    },
+
+    submitPaper () {
+      const self = this;
+      const paper = {
+        name: self.name,
+        singleQuestions: [],
+        mutipleQuestions: [],
+        blankQuestions: []
+      };
+
+      for(var i = 0; i < self.questions.length; i++) {
+        let question = self.questions[i];
+        switch (question.type){
+          case 'single':
+            paper.singleQuestions.push(question);
+            break;
+          case 'mutiple':
+            paper.mutipleQuestions.push(question);
+            break;
+          case 'blank':
+            paper.blankQuestions.push(question);
+            break;
+          default:
+            break;
+        }
+      }
+
+      new PaperIO().addPaper(paper).then(res => {
+        alert('success')
+      }).catch(err => {
+        alert('error')
+      })
     }
   }
 }
