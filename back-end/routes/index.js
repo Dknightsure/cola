@@ -44,6 +44,7 @@ var BlankQuestionSchema = new mongoose.Schema({
 
 var PaperSchema = new mongoose.Schema({
   name: { type: String },
+  date: { type: Number },
   singleQuestions: [SingleQuestionSchema],
   mutipleQuestions: [MutipleQuestionSchema],
   blankQuestions: [BlankQuestionSchema]
@@ -237,7 +238,8 @@ router.post('/api/remove-blank-question', function (req, res, next) {
 
 router.post('/api/add-paper', function (req, res, next) {
   var paper = new PaperModel({
-    name: req.body.name
+    name: req.body.name,
+    date: +new Date
   });
 
   //添加单选

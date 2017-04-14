@@ -14,4 +14,14 @@ PaperIO.prototype.addPaper = function (data) {
   })
 }
 
+PaperIO.prototype.getList = function (params) {
+  let obj = this.api.getPaperList;
+
+  return this.axios({
+    method: obj.method,
+    url: obj.url,
+    params: params
+  })
+}
+
 export default PaperIO

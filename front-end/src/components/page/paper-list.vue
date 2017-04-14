@@ -65,7 +65,7 @@
                 </div>
                 <div class="layout-content">
                     <div class="layout-content-main">
-
+                        <Table border :columns="column" :data="data"></Table>
                     </div>
                 </div>
                 <div class="layout-copy">
@@ -77,9 +77,61 @@
 </template>
 <script>
 import LeftNav from '../sub/left-nav'
-    export default {
-      components: {
-        LeftNav
-      }
+import PaperIO from '../../io/PaperIO'
+
+export default {
+  data () {
+    return {
+      self: this,
+      column: [
+        {
+            title: '试卷名称',
+            key: 'name',
+            render (row, column, index) {
+                return `<Icon type="document-text"></Icon> <strong>${row.name}</strong>`;
+            }
+        },
+        {
+            title: '创建时间',
+            key: 'date'
+        },
+        {
+            title: '操作',
+            key: 'action',
+            width: 150,
+            align: 'center',
+            render (row, column, index) {
+                return `<i-button type="primary" size="small" @click="show(${index})">查看</i-button> <i-button type="error" size="small" @click="remove(${index})">删除</i-button>`;
+            }
+        }
+      ],
+      data: []  
     }
+  },
+
+  mounted () {
+    this.fetchData();
+  },
+
+  methods: {
+    fetchData () {
+      const self = this;
+      new PaperIO().getList().then(res => {
+        let paperList = res.data;
+        for(let i = 0; i < paperList.length; i++){
+          let paper = {};
+          paper.name = paperList[i].name;
+          paper.date = new Date(paperList[i].date);
+          self.data.push(paper);
+        }
+      }).catch(err => {
+        alert('err')
+      })
+    }
+  },
+  
+  components: {
+    LeftNav
+  }
+}
 </script>
