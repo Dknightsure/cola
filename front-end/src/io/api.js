@@ -41,5 +41,10 @@ export default {
   getPaperList: {
     url: '/api/get-papers',
     method: 'GET'
+  },
+
+  getPaperDetail: {
+    url: '/api/get-paper-detail',
+    method: 'POST'
   }
 }

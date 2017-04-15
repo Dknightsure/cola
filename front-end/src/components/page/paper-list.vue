@@ -65,7 +65,7 @@
                 </div>
                 <div class="layout-content">
                     <div class="layout-content-main">
-                        <Table border :columns="column" :data="data"></Table>
+                        <Table border :context="self" :columns="head" :data="data"></Table>
                     </div>
                 </div>
                 <div class="layout-copy">
@@ -83,7 +83,7 @@ export default {
   data () {
     return {
       self: this,
-      column: [
+      head: [
         {
             title: '试卷名称',
             key: 'name',
@@ -101,11 +101,11 @@ export default {
             width: 150,
             align: 'center',
             render (row, column, index) {
-                return `<i-button type="primary" size="small" @click="show(${index})">查看</i-button> <i-button type="error" size="small" @click="remove(${index})">删除</i-button>`;
+                return `<i-button type="primary" size="small" @click="showDetail(${index})">查看</i-button> <i-button type="error" size="small" @click="remove(${index})">删除</i-button>`;
             }
         }
       ],
-      data: []  
+      data: []
     }
   },
 
@@ -122,8 +122,19 @@ export default {
           let paper = {};
           paper.name = paperList[i].name;
           paper.date = new Date(paperList[i].date);
+          paper._id = paperList[i]._id;
           self.data.push(paper);
         }
+      }).catch(err => {
+        alert('err')
+      })
+    },
+
+    showDetail (index) {
+      const id = this.data[index]._id;
+      new PaperIO().getDetail({id}).then(res => {
+        // TODO
+        console.log(res.data)
       }).catch(err => {
         alert('err')
       })

@@ -291,6 +291,16 @@ router.get('/api/get-papers', function (req, res, next) {
   PaperModel.find({}, function (err, data) {
     res.json(data);
   })
+});
+
+router.post('/api/get-paper-detail/', function (req, res, next) {
+  PaperModel.findById(req.body.id, function (err, paper) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(paper);
+    }
+  })
 })
 
 module.exports = router;
