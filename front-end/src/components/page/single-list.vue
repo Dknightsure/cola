@@ -74,11 +74,13 @@
                 </div>
             </i-col>
         </Row>
+        <single-modal></single-modal>
     </div>
 </template>
 <script>
 import LeftNav from '../sub/left-nav'
 import SingleQuery from '../sub/single-query'
+import SingleModal from '../sub/modal-single-alter'
 import SingleIO from '../../io/SingleIO'
 
 export default {
@@ -105,7 +107,8 @@ export default {
 
   components: {
     LeftNav,
-    SingleQuery
+    SingleQuery,
+    SingleModal
   }
 }
 </script>

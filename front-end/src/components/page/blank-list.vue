@@ -74,12 +74,14 @@
                 </div>
             </i-col>
         </Row>
+        <blank-modal></blank-modal>
     </div>
 </template>
 <script>
 import LeftNav from '../sub/left-nav'
 import BlankQuery from '../sub/blank-query'
 import BlankIO from '../../io/BlankIO'
+import BlankModal from '../sub/modal-blank-alter'
 
 export default {
   data () {
@@ -105,7 +107,8 @@ export default {
 
   components: {
     LeftNav,
-    BlankQuery
+    BlankQuery,
+    BlankModal
   }
 }
 </script>

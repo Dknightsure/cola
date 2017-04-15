@@ -38,7 +38,7 @@
               <Rate allow-half v-model="question.difficulty"></Rate>
           </Form-item>
           <Form-item>
-              <Button type="primary">修改</Button>
+              <Button type="primary" @click="alter">修改</Button>
               <Button type="error" style="margin-left: 8px">删除</Button>
               <Button type="success" style="margin-left: 30px" @click="addQuestionToPaper">加入试卷</Button>
           </Form-item>
@@ -51,6 +51,7 @@
 <script>
 import BlankIO from '../../io/BlankIO'
 import Bus from '../bus'
+import utils from '../../utils'
 
 export default {
   data () {
@@ -63,6 +64,10 @@ export default {
   methods: {
     addQuestionToPaper () {
       Bus.$emit('addQuestionToPaper', this.question)
+    },
+
+    alter () {
+      Bus.$emit('alterBlankQuestion', utils.clone(this.question))
     }
   }
 }

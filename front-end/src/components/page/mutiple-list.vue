@@ -74,12 +74,14 @@
                 </div>
             </i-col>
         </Row>
+        <mutiple-modal></mutiple-modal>
     </div>
 </template>
 <script>
 import LeftNav from '../sub/left-nav'
 import MutipleQuery from '../sub/mutiple-query'
 import MutipleIO from '../../io/MutipleIO'
+import MutipleModal from '../sub/modal-mutiple-alter'
 
 export default {
   data () {
@@ -105,7 +107,8 @@ export default {
 
   components: {
     LeftNav,
-    MutipleQuery
+    MutipleQuery,
+    MutipleModal
   }
 }
 </script>
