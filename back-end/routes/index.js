@@ -271,7 +271,7 @@ router.post('/api/add-paper', function (req, res, next) {
     var q = req.body.blankQuestions[k];
     var question = {
       title: q.title,
-      answer: q.answer,
+      selections: q.selections,
       difficulty: q.difficulty
     }
     paper.blankQuestions.push(question);

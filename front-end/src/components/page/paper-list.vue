@@ -73,11 +73,14 @@
                 </div>
             </i-col>
         </Row>
+        <paper-detail></paper-detail>
     </div>
 </template>
 <script>
 import LeftNav from '../sub/left-nav'
 import PaperIO from '../../io/PaperIO'
+import PaperDetail from '../sub/paper-detail'
+import Bus from '../bus'
 
 export default {
   data () {
@@ -133,8 +136,8 @@ export default {
     showDetail (index) {
       const id = this.data[index]._id;
       new PaperIO().getDetail({id}).then(res => {
-        // TODO
         console.log(res.data)
+        Bus.$emit('showPaperDetail', res.data);
       }).catch(err => {
         alert('err')
       })
@@ -142,7 +145,8 @@ export default {
   },
   
   components: {
-    LeftNav
+    LeftNav,
+    PaperDetail
   }
 }
 </script>
