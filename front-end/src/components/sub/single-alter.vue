@@ -87,11 +87,11 @@ export default {
     },
 
     submit () {
-      console.log(JSON.stringify(this.question))
+      const self = this
       new SingleIO().addSignle(this.question).then(res => {
-        alert('success')
+        self.$Message.success('添加成功！')
       }).catch(err => {
-        alert('err')
+        self.$Message.error('添加失败！')
       })
     }
   }

@@ -99,9 +99,10 @@ export default {
       const self = this;
       new SingleIO().alter(this.question).then(res => {
         self.close()
+        self.$Message.success('修改成功！')
         Bus.$emit('updateSingleList')
       }).catch(err => {
-        alert('err')
+        self.$Message.error('修改失败！')
       })
     }
   }
