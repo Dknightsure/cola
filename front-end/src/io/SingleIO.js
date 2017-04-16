@@ -24,4 +24,14 @@ SingleIO.prototype.getList = function (params) {
   })
 }
 
+SingleIO.prototype.alter = function (data) {
+  let obj = this.api.alterSingle;
+
+  return this.axios({
+    method: obj.method,
+    url: obj.url,
+    data: data
+  })
+}
+
 export default SingleIO

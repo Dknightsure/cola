@@ -35,7 +35,7 @@
               {{ item.title }}
           </Form-item>
           <Form-item label="题目难度">
-              <Rate allow-half v-model="question.difficulty"></Rate>
+              <Rate allow-half disabled v-model="question.difficulty"></Rate>
           </Form-item>
           <Form-item>
               <Button type="primary" @click="alter">修改</Button>

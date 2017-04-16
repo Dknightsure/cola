@@ -82,6 +82,7 @@ import LeftNav from '../sub/left-nav'
 import SingleQuery from '../sub/single-query'
 import SingleModal from '../sub/modal-single-alter'
 import SingleIO from '../../io/SingleIO'
+import Bus from '../bus'
 
 export default {
   data () {
@@ -92,6 +93,7 @@ export default {
 
   mounted () {
     this.fetchData()
+    this.listenUpdate()
   },
 
   methods: {
@@ -101,6 +103,13 @@ export default {
         self.questions = res.data;
       }).catch(err => {
         console.log(err);
+      })
+    },
+
+    listenUpdate () {
+      const self = this
+      Bus.$on('updateSingleList', () => {
+        self.fetchData()
       })
     }
   },

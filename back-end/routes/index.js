@@ -80,15 +80,14 @@ router.get('/api/query-blank-question', function (req, res, next) {
 })
 
 router.post('/api/alter-single-question', function (req, res, next) {
-  var question_data = JSON.parse(req.body.question_data);
-  SingleQuestionModel.findById(question_data._id, function (err, question) {
+  SingleQuestionModel.findById(req.body._id, function (err, question) {
     if (err) {
       return console.log(err);
     } else {
-      question.title = question_data.title;
-      question.selections = question_data.selections;
-      question.answer = question_data.answer;
-      question.difficulty = question_data.difficulty;
+      question.title = req.body.title;
+      question.selections = req.body.selections;
+      question.answer = req.body.answer;
+      question.difficulty = req.body.difficulty;
 
       question.save(function (err) {
         if (err) {
@@ -102,15 +101,14 @@ router.post('/api/alter-single-question', function (req, res, next) {
 })
 
 router.post('/api/alter-mutiple-question', function (req, res, next) {
-  var question_data = JSON.parse(req.body.question_data);
-  MutipleQuestionModel.findById(question_data._id, function (err, question) {
+  MutipleQuestionModel.findById(req.body._id, function (err, question) {
     if (err) {
       return console.log(err);
     } else {
-      question.title = question_data.title;
-      question.selections = question_data.selections;
-      question.answer = question_data.answer;
-      question.difficulty = question_data.difficulty;
+      question.title = req.body.title;
+      question.selections = req.body.selections;
+      question.answer = req.body.answer;
+      question.difficulty = req.body.difficulty;
 
       question.save(function (err) {
         if (err) {
@@ -124,14 +122,13 @@ router.post('/api/alter-mutiple-question', function (req, res, next) {
 })
 
 router.post('/api/alter-blank-question', function (req, res, next) {
-  var question_data = JSON.parse(req.body.question_data);
-  BlankQuestionModel.findById(question_data._id, function (err, question) {
+  BlankQuestionModel.findById(req.body._id, function (err, question) {
     if (err) {
       return console.log(err);
     } else {
-      question.title = question_data.title;
-      question.answer = question_data.answer;
-      question.difficulty = question_data.difficulty;
+      question.title = req.body.title;
+      question.selections = req.body.selections;
+      question.difficulty = req.body.difficulty;
 
       question.save(function (err) {
         if (err) {

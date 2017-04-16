@@ -82,6 +82,7 @@ import LeftNav from '../sub/left-nav'
 import BlankQuery from '../sub/blank-query'
 import BlankIO from '../../io/BlankIO'
 import BlankModal from '../sub/modal-blank-alter'
+import Bus from '../bus'
 
 export default {
   data () {
@@ -92,6 +93,7 @@ export default {
 
   mounted () {
     this.fetchData()
+    this.listenUpdate()
   },
 
   methods: {
@@ -101,6 +103,14 @@ export default {
         self.questions = res.data;
       }).catch(err => {
         console.log(err);
+      })
+    },
+
+    listenUpdate () {
+      const self = this
+      Bus.$on('updateBlankList', () => {
+        console.log('updateBlank')
+        self.fetchData()
       })
     }
   },

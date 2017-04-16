@@ -46,5 +46,20 @@ export default {
   getPaperDetail: {
     url: '/api/get-paper-detail',
     method: 'POST'
+  },
+
+  alterSingle: {
+    url: '/api/alter-single-question',
+    method: 'POST'
+  },
+
+  alterMutiple: {
+    url: '/api/alter-mutiple-question',
+    method: 'POST'
+  },
+
+  alterBlank: {
+    url: '/api/alter-blank-question',
+    method: 'POST'
   }
 }

@@ -43,7 +43,7 @@
             <Rate allow-half v-model="question.difficulty"></Rate>
         </Form-item>
         <Form-item>
-            <Button type="primary">提交</Button>
+            <Button type="primary" @click="submit">提交</Button>
             <Button type="ghost" style="margin-left: 8px" @click="addOption">添加填空</Button>
         </Form-item>
     </Form>
@@ -53,6 +53,7 @@
 
 <script>
 import Bus from '../bus'
+import BlankIO from '../../io/BlankIO'
 
 export default {
   data () {
@@ -84,6 +85,20 @@ export default {
     deleteOption (index) {
       this.question.selections.splice(index, 1)
     },
+
+    close () {
+      this.isVisible = false
+    },
+
+    submit () {
+      const self = this;
+      new BlankIO().alter(this.question).then(res => {
+        self.close()
+        Bus.$emit('updateBlankList')
+      }).catch(err => {
+        alert('err')
+      })
+    }
   }
 }
 </script>
