@@ -74,6 +74,13 @@
             </i-col>
         </Row>
         <paper-detail></paper-detail>
+        <Modal
+            v-model="isDeleteConfirmVisible"
+            title="确认框"
+            @on-ok="remove"
+            @on-cancel="cancel">
+            <p>你确认要删除吗？</p>
+        </Modal>
     </div>
 </template>
 <script>
@@ -86,6 +93,8 @@ export default {
   data () {
     return {
       self: this,
+      isDeleteConfirmVisible: false,
+      removeIndex: 0,
       head: [
         {
             title: '试卷名称',
@@ -104,7 +113,7 @@ export default {
             width: 150,
             align: 'center',
             render (row, column, index) {
-                return `<i-button type="primary" size="small" @click="showDetail(${index})">查看</i-button> <i-button type="error" size="small" @click="remove(${index})">删除</i-button>`;
+                return `<i-button type="primary" size="small" @click="showDetail(${index})">查看</i-button> <i-button type="error" size="small" @click="deleteConfirm(${index})">删除</i-button>`;
             }
         }
       ],
@@ -119,6 +128,7 @@ export default {
   methods: {
     fetchData () {
       const self = this;
+      self.data = []
       new PaperIO().getList().then(res => {
         let paperList = res.data;
         for(let i = 0; i < paperList.length; i++){
@@ -141,6 +151,32 @@ export default {
       }).catch(err => {
         alert('err')
       })
+    },
+
+    deleteConfirm (index) {
+      this.isDeleteConfirmVisible = true
+      this.removeIndex = index
+    },
+
+    close () {
+      this.isDeleteConfirmVisible = false
+    },
+
+    remove () {
+      const self = this;
+      const index = this.removeIndex;
+      const id = this.data[index]._id;
+      new PaperIO().delete({id}).then(res => {
+        this.$Message.success('删除成功！');
+        self.close();
+        self.fetchData();
+      }).catch(err => {
+        this.$Message.error('删除失败！');
+      })
+    },
+
+    cancel () {
+      this.$Message.info('取消删除！');
     }
   },
   

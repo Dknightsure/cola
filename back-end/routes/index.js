@@ -233,6 +233,18 @@ router.post('/api/remove-blank-question', function (req, res, next) {
   })
 });
 
+router.post('/api/remove-paper', function (req, res, next) {
+  var id = ObjectId(req.body.id);
+  PaperModel.remove({ _id: id }, function (err) {
+    if (err) {
+      console.log(err);
+      res.json('fail');
+    } else {
+      res.json('success');
+    }
+  })
+})
+
 router.post('/api/add-paper', function (req, res, next) {
   var paper = new PaperModel({
     name: req.body.name,

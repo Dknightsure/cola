@@ -34,4 +34,14 @@ PaperIO.prototype.getDetail = function (data) {
   })
 }
 
+PaperIO.prototype.delete = function (data) {
+  let obj = this.api.deletePaper;
+
+  return this.axios({
+    method: obj.method,
+    url: obj.url,
+    data: data
+  })
+}
+
 export default PaperIO

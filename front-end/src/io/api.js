@@ -76,5 +76,10 @@ export default {
   deleteBlank: {
     url: '/api/remove-blank-question',
     method: 'POST'
+  },
+
+  deletePaper: {
+    url: '/api/remove-paper',
+    method: 'POST'
   }
 }
