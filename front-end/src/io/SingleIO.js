@@ -34,4 +34,14 @@ SingleIO.prototype.alter = function (data) {
   })
 }
 
+SingleIO.prototype.delete = function (data) {
+  let obj = this.api.deleteSingle;
+
+  return this.axios({
+    method: obj.method,
+    url: obj.url,
+    data: data
+  })
+}
+
 export default SingleIO

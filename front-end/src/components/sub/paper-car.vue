@@ -102,11 +102,13 @@ export default {
       const self = this;
       Bus.$on('addQuestionToPaper', (question) => {
         self.questions.push(question);
+        self.$Message.success('添加到试卷成功！')
       })
     },
 
     deleteQuestion (index) {
       this.questions.splice(index, 1);
+      this.$Message.success('试题移出试卷成功！')
     },
 
     submitPaper () {

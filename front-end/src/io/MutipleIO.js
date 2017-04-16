@@ -34,4 +34,14 @@ MutipleIO.prototype.alter = function (data) {
   })
 }
 
+MutipleIO.prototype.delete = function (data) {
+  let obj = this.api.deleteMutiple;
+
+  return this.axios({
+    method: obj.method,
+    url: obj.url,
+    data: data
+  })
+}
+
 export default MutipleIO

@@ -45,12 +45,19 @@
           </Form-item>
           <Form-item>
               <Button type="primary" @click="alter">修改</Button>
-              <Button type="error" style="margin-left: 8px">删除</Button>
+              <Button type="error" style="margin-left: 8px" @click="isDeleteConfirmVisible = true">删除</Button>
               <Button type="success" style="margin-left: 30px" @click="addQuestionToPaper">加入试卷</Button>
           </Form-item>
         </Form>
       </Card>
     </Col>
+    <Modal
+        v-model="isDeleteConfirmVisible"
+        title="确认框"
+        @on-ok="remove"
+        @on-cancel="cancel">
+        <p>你确认要删除吗？</p>
+    </Modal>
   </Row>
 
 </template>
@@ -58,10 +65,12 @@
 <script>
 import Bus from '../bus'
 import utils from '../../utils'
+import SingleIO from '../../io/SingleIO'
 
 export default {
   data () {
     return {
+      isDeleteConfirmVisible: false
     }
   },
 
@@ -74,6 +83,21 @@ export default {
 
     alter () {
       Bus.$emit('alterSingleQuestion', utils.clone(this.question))
+    },
+
+    remove () {
+      const self = this
+      const id = this.question._id
+      new SingleIO().delete({id}).then(res => {
+        self.$Message.success('删除成功！');
+        Bus.$emit('updateSingleList')
+      }).catch(err => {
+        alert('err')
+      })
+    },
+
+    cancel () {
+      this.$Message.info('取消删除！');
     }
   }
 }

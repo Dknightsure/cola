@@ -61,5 +61,20 @@ export default {
   alterBlank: {
     url: '/api/alter-blank-question',
     method: 'POST'
+  },
+
+  deleteSingle: {
+    url: '/api/remove-single-question',
+    method: 'POST'
+  },
+
+  deleteMutiple: {
+    url: '/api/remove-mutiple-question',
+    method: 'POST'
+  },
+
+  deleteBlank: {
+    url: '/api/remove-blank-question',
+    method: 'POST'
   }
 }

@@ -34,4 +34,14 @@ BlankIO.prototype.alter = function (data) {
   })
 }
 
+BlankIO.prototype.delete = function (data) {
+  let obj = this.api.deleteBlank;
+
+  return this.axios({
+    method: obj.method,
+    url: obj.url,
+    data: data
+  })
+}
+
 export default BlankIO
