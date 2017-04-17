@@ -1,0 +1,88 @@
+<style lang="scss" scoped>
+.s-paper-table {
+  margin: 20px 0 0 0;
+}
+</style>
+
+<template>
+  <Row>
+    <Col span="12" offset="6">
+      <student-nav activeName="exam"></student-nav>
+      <Table border :context="self" :columns="head" :data="data" class="s-paper-table"></Table>
+    </Col>
+  </Row>
+</template>
+
+<script>
+import NAME from '../../router/name'
+import StudentNav from '../sub/student-nav'
+import PaperIO from '../../io/PaperIO'
+import $ from 'jquery'
+
+export default {
+  data () {
+    return {
+      self: this,
+      head: [
+        {
+            title: '试卷名称',
+            key: 'name',
+            render (row, column, index) {
+                return `<Icon type="document-text"></Icon> <strong>${row.name}</strong>`;
+            }
+        },
+        {
+            title: '创建时间',
+            key: 'date'
+        },
+        {
+            title: '操作',
+            key: 'action',
+            width: 150,
+            align: 'center',
+            render (row, column, index) {
+                return `<i-button type="primary" size="small" @click="enter(${index})">参加考试</i-button>`;
+            }
+        }
+      ],
+      data: []
+    }
+  },
+
+  mounted () {
+    this.fetchData();
+    this.paperCarHide();
+  },
+
+  methods: {
+    fetchData () {
+      const self = this;
+      self.data = []
+      new PaperIO().getList().then(res => {
+        let paperList = res.data;
+        for(let i = 0; i < paperList.length; i++){
+          let paper = {};
+          paper.name = paperList[i].name;
+          paper.date = new Date(paperList[i].date);
+          paper._id = paperList[i]._id;
+          self.data.push(paper);
+        }
+      }).catch(err => {
+        alert('err')
+      })
+    },
+
+    paperCarHide () {
+      $('.container-paper-car').hide()
+    },
+
+    enter () {
+      console.log('enter')
+    }
+  },
+
+  components: {
+    StudentNav
+  }
+}
+</script>

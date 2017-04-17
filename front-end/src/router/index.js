@@ -7,6 +7,8 @@ import AddSignle from '@/components/page/add-single'
 import AddMutiple from '@/components/page/add-mutiple'
 import AddBlank from '@/components/page/add-blank'
 import PaperList from '@/components/page/paper-list'
+import StudentExamList from '@/components/page/student-exam-list'
+import StudentPracticeList from '@/components/page/student-practice-list'
 
 import NAME from './name'
 
@@ -41,5 +43,13 @@ export default new Router({
     path: '/papers',
     name: NAME.PAPER_LIST,
     component: PaperList
+  }, {
+    path: '/student/examList',
+    name: NAME.STUDENT_EXAM_LIST,
+    component: StudentExamList
+  }, {
+    path: '/student/practiceList',
+    name: NAME.STUDENT_PRACTICE_LIST,
+    component: StudentPracticeList
   }]
 })

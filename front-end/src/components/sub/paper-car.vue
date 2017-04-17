@@ -1,5 +1,5 @@
 <style lang="scss" scoped>
-.container {
+.container-paper-car {
   position: fixed;
   width: 300px;
   left: 25%;
@@ -67,7 +67,7 @@
 }
 </style>
 <template>
-  <div class="container">
+  <div class="container-paper-car">
     <Input v-model="name" placeholder="试卷标题..." style="width: 300px"></Input>
     <ul>
       <li v-for="(question, index) in questions">

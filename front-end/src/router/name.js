@@ -7,5 +7,7 @@ export default {
   ADD_SINGLE: 'add-single',
   ADD_MUTIPLE: 'add-mutiple',
   ADD_BLANK: 'add-blank',
-  PAPER_LIST: 'paper-list'
+  PAPER_LIST: 'paper-list',
+  STUDENT_EXAM_LIST: 'student-exam-list',
+  STUDENT_PRACTICE_LIST: 'student-practice-list'
 }
