@@ -86,5 +86,10 @@ export default {
   addExam: {
     url: '/api/add-exam-answer',
     method: 'POST'
+  },
+
+  getExamRecord: {
+    url: '/api/get-exam-list',
+    method: 'POST'
   }
 }

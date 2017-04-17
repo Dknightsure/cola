@@ -54,4 +54,14 @@ PaperIO.prototype.addExam = function (data) {
   })
 }
 
+PaperIO.prototype.getExam = function (data) {
+  let obj = this.api.getExamRecord;
+
+  return this.axios({
+    method: obj.method,
+    url: obj.url,
+    data: data
+  })
+}
+
 export default PaperIO

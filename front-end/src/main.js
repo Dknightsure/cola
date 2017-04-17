@@ -14,6 +14,8 @@ Vue.use(iView);
 
 Vue.config.productionTip = false
 
+window.USER = 'hushuo'
+
 new Vue({
   el: '#app',
   router,

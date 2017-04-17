@@ -389,4 +389,24 @@ router.post('/api/add-exam-answer', function (req, res, next) {
   })
 })
 
+router.post('/api/get-exam-list', function (req, res, next) {
+  var user = req.body.user
+  ExamModel.find({ "answers.user": user }, function (err, exams) {
+    if (!err) {
+      // TODO
+      exams.forEach(function (exam) {
+        PaperModel.findById(exam.paper, function (err, paper) {
+          exam.name = paper.name
+          console.log('------------')
+          console.log(exam.name)
+          res.json(exam)
+        })
+      });
+      // res.json(exams);
+    } else {
+      res.json('fail')
+    }
+  })
+})
+
 module.exports = router;

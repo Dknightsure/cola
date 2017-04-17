@@ -12,6 +12,14 @@
           <Icon type="ios-people"></Icon>
           练习
       </Menu-item>
+      <Menu-item name="exam-record">
+          <Icon type="ios-people"></Icon>
+          我的考试记录
+      </Menu-item>
+      <Menu-item name="practice-record">
+          <Icon type="ios-people"></Icon>
+          我的联系练习
+      </Menu-item>
     </Menu>
   </Row>
 </template>
@@ -38,6 +46,16 @@ export default {
         case 'practice':
           this.$router.push({
             name: NAME.STUDENT_PRACTICE_LIST
+          })
+          break;
+        case 'exam-record':
+          this.$router.push({
+            name: NAME.EXAM_RECORD
+          })
+          break;
+        case 'practice-record':
+          this.$router.push({
+            name: NAME.PRACTICE_RECORD
           })
           break;
         default:
