@@ -9,6 +9,7 @@ import AddBlank from '@/components/page/add-blank'
 import PaperList from '@/components/page/paper-list'
 import StudentExamList from '@/components/page/student-exam-list'
 import StudentPracticeList from '@/components/page/student-practice-list'
+import StudentExam from '@/components/page/student-exam'
 
 import NAME from './name'
 
@@ -51,5 +52,9 @@ export default new Router({
     path: '/student/practiceList',
     name: NAME.STUDENT_PRACTICE_LIST,
     component: StudentPracticeList
+  }, {
+    path: '/exam/:paperId',
+    name: NAME.STUDENT_EXAM,
+    component: StudentExam
   }]
 })

@@ -9,5 +9,6 @@ export default {
   ADD_BLANK: 'add-blank',
   PAPER_LIST: 'paper-list',
   STUDENT_EXAM_LIST: 'student-exam-list',
-  STUDENT_PRACTICE_LIST: 'student-practice-list'
+  STUDENT_PRACTICE_LIST: 'student-practice-list',
+  STUDENT_EXAM: 'student-exam'
 }

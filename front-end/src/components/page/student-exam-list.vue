@@ -9,6 +9,13 @@
     <Col span="12" offset="6">
       <student-nav activeName="exam"></student-nav>
       <Table border :context="self" :columns="head" :data="data" class="s-paper-table"></Table>
+      <Modal
+        v-model="isModalVisible"
+        title="确认框"
+        @on-ok="ok"
+        @on-cancel="cancel">
+        <p>你确认要进行考试吗？考试中途不能退出哦!</p>
+    </Modal>
     </Col>
   </Row>
 </template>
@@ -23,6 +30,8 @@ export default {
   data () {
     return {
       self: this,
+      isModalVisible: false,
+      paperIndex: 0,
       head: [
         {
             title: '试卷名称',
@@ -76,8 +85,22 @@ export default {
       $('.container-paper-car').hide()
     },
 
-    enter () {
-      console.log('enter')
+    enter (index) {
+      this.paperIndex = index;
+      this.isModalVisible = true;
+    },
+
+    ok () {
+      this.$router.push({
+        name: NAME.STUDENT_EXAM,
+        params: {
+          paperId: this.data[this.paperIndex]._id
+        }
+      })
+    },
+
+    cancel () {
+      this.isModalVisible = false;
     }
   },
 
