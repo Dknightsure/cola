@@ -15,7 +15,7 @@
         @on-ok="ok"
         @on-cancel="cancel">
         <p>你确认要进行考试吗？考试中途不能退出哦!</p>
-    </Modal>
+      </Modal>
     </Col>
   </Row>
 </template>

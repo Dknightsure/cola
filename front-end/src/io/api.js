@@ -81,5 +81,10 @@ export default {
   deletePaper: {
     url: '/api/remove-paper',
     method: 'POST'
+  },
+
+  addExam: {
+    url: '/api/add-exam-answer',
+    method: 'POST'
   }
 }

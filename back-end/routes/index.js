@@ -15,6 +15,8 @@ db.connection.on("open", function (error) {
   console.log("++++++数据库连成功++++++");
 });
 
+var USER = 'hushuo'
+
 var SelectionSchema = new mongoose.Schema({
   title: { type: String }
 });
@@ -50,10 +52,39 @@ var PaperSchema = new mongoose.Schema({
   blankQuestions: [BlankQuestionSchema]
 });
 
+var ExamSingleAnswer = new mongoose.Schema({
+  questionId: { type: String },
+  answer: { type: Number }
+})
+
+var ExamMutipleAnswer = new mongoose.Schema({
+  questionId: { type: String },
+  answer: { type: Array }
+})
+
+var ExamBlankAnswer = new mongoose.Schema({
+  questionId: { type: String },
+  answer: [SelectionSchema]
+})
+
+var ExamAnswer = new mongoose.Schema({
+  user: { type: String },
+  makeup: { type: Number },
+  singleQuestions: [ExamSingleAnswer],
+  mutipleQuestions: [ExamMutipleAnswer],
+  blankQuestions: [ExamBlankAnswer]
+})
+
+var ExamSchema = new mongoose.Schema({
+  paper: { type: String },
+  answers: [ExamAnswer]
+})
+
 var SingleQuestionModel = db.model('SingleQuestions', SingleQuestionSchema);
 var MutipleQuestionModel = db.model('MutipleQuestions', MutipleQuestionSchema);
 var BlankQuestionModel = db.model('BlankQuestions', BlankQuestionSchema);
 var PaperModel = db.model('Papers', PaperSchema);
+var ExamModel = db.model('Exams', ExamSchema);
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -308,6 +339,52 @@ router.post('/api/get-paper-detail/', function (req, res, next) {
       console.log(err);
     } else {
       res.json(paper);
+    }
+  })
+})
+
+router.post('/api/add-exam-answer', function (req, res, next) {
+  var paperId = req.body._id;
+
+  var answer = {
+    user: USER,
+    makeup: 0
+  }
+
+  answer.singleQuestions = req.body.singleQuestions;
+  answer.mutipleQuestions = req.body.mutipleQuestions;
+  answer.blankQuestions = req.body.blankQuestions;
+
+  ExamModel.findOne({ paper: paperId }, function (err, paper) {
+    if (err) {
+      console.log(err);
+    } else {
+      if (paper === null) {
+        var exam = new ExamModel({
+          paper: paperId,
+          answers: []
+        });
+
+        exam.answers.push(answer);
+
+        exam.save(function (err) {
+          if (err) {
+            console.log(err)
+            res.json('fail')
+          } else {
+            res.json('success')
+          }
+        })
+      } else {
+        paper.answers.push(answer);
+        paper.save(function (err) {
+          if (!err) {
+            res.json('success')
+          } else {
+            res.json('fail');
+          }
+        })
+      }
     }
   })
 })

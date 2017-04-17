@@ -44,4 +44,14 @@ PaperIO.prototype.delete = function (data) {
   })
 }
 
+PaperIO.prototype.addExam = function (data) {
+  let obj = this.api.addExam;
+
+  return this.axios({
+    method: obj.method,
+    url: obj.url,
+    data: data
+  })
+}
+
 export default PaperIO
