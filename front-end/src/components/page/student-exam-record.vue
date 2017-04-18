@@ -10,6 +10,7 @@
       <student-nav activeName="exam-record"></student-nav>
       <Table border :context="self" :columns="head" :data="data" class="s-paper-table"></Table>
     </Col>
+    <exam-result></exam-result>
   </Row>
 </template>
 
@@ -17,6 +18,8 @@
 import StudentNav from '../sub/student-nav'
 import $ from 'jquery'
 import PaperIO from '../../io/PaperIO'
+import Bus from '../bus'
+import ExamResult from '../sub/exam-result'
 
 export default {
   data () {
@@ -78,7 +81,17 @@ export default {
     },
 
     show (index) {
-      console.log(index)
+      const self = this
+      const record = this.data[index]
+      new PaperIO().getExamResult({
+        paperId: record.paperId,
+        examId: record.examId
+      }).then(res => {
+        console.log(res.data);
+        Bus.$emit('showExamResult', res.data)
+      }, err => {
+        self.$Message.error('获取考试详情失败！')
+      })
     },
 
     paperCarHide () {
@@ -87,7 +100,8 @@ export default {
   },
 
   components: {
-    StudentNav
+    StudentNav,
+    ExamResult
   }
 }
 </script>

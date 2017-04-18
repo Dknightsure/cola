@@ -91,5 +91,10 @@ export default {
   getExamRecord: {
     url: '/api/get-exam-list',
     method: 'POST'
+  },
+
+  getExamResult: {
+    url: '/api/get-exam-result',
+    method: 'POST'
   }
 }

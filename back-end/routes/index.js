@@ -64,7 +64,7 @@ var ExamMutipleAnswer = new mongoose.Schema({
 
 var ExamBlankAnswer = new mongoose.Schema({
   questionId: { type: String },
-  answer: [SelectionSchema]
+  selections: [SelectionSchema]
 })
 
 var ExamSchema = new mongoose.Schema({
@@ -385,6 +385,40 @@ router.post('/api/get-exam-list', function (req, res, next) {
     } else {
       res.json('fail')
     }
+  })
+})
+
+router.post('/api/get-exam-result', function (req, res, next) {
+  var paperId = req.body.paperId;
+  var examId = req.body.examId;
+
+  var queryPaper = new Promise((resolve, reject) => {
+    PaperModel.findById(paperId).lean().exec(function (err, paper) {
+      if (!err) {
+        resolve(paper)
+      } else {
+        reject(err)
+      }
+    })
+  })
+
+  var queryExam = new Promise((resolve, reject) => {
+    ExamModel.findById(examId).lean().exec(function (err, exam) {
+      if (!err) {
+        resolve(exam)
+      } else {
+        reject(err)
+      }
+    })
+  })
+
+  Promise.all([queryPaper, queryExam]).then(data => {
+    res.json({
+      paper: data[0],
+      exam: data[1]
+    })
+  }).catch(err => {
+    res.json('fail')
   })
 })
 
