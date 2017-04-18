@@ -138,9 +138,9 @@ export default {
       }
 
       new PaperIO().addPaper(paper).then(res => {
-        alert('success')
+        self.$Message.success('发布试卷成功！')
       }).catch(err => {
-        alert('error')
+        self.$Message.error('发布试卷失败！')
       })
     }
   }

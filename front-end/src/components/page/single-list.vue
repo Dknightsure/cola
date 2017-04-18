@@ -102,7 +102,7 @@ export default {
       new SingleIO().getList().then(res => {
         self.questions = res.data;
       }).catch(err => {
-        console.log(err);
+        self.$Message.error('获取单选列表失败！')
       })
     },
 

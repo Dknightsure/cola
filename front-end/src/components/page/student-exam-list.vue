@@ -77,7 +77,7 @@ export default {
           self.data.push(paper);
         }
       }).catch(err => {
-        alert('err')
+        self.$Message.error('获取考试记录列表失败！')
       })
     },
 

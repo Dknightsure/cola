@@ -9,15 +9,15 @@
           考试
       </Menu-item>
       <Menu-item name="practice">
-          <Icon type="ios-people"></Icon>
+          <Icon type="ios-paper-outline"></Icon>
           练习
       </Menu-item>
       <Menu-item name="exam-record">
-          <Icon type="ios-people"></Icon>
+          <Icon type="ios-list"></Icon>
           我的考试记录
       </Menu-item>
       <Menu-item name="practice-record">
-          <Icon type="ios-people"></Icon>
+          <Icon type="ios-list-outline"></Icon>
           我的练习记录
       </Menu-item>
     </Menu>

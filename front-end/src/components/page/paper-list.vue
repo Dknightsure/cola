@@ -139,7 +139,7 @@ export default {
           self.data.push(paper);
         }
       }).catch(err => {
-        alert('err')
+        self.$Message.error('获取试卷列表失败！')
       })
     },
 
@@ -149,7 +149,7 @@ export default {
         console.log(res.data)
         Bus.$emit('showPaperDetail', res.data);
       }).catch(err => {
-        alert('err')
+        self.$Message.error('获取试卷详情失败！')
       })
     },
 
