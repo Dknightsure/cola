@@ -18,7 +18,7 @@
       </Menu-item>
       <Menu-item name="practice-record">
           <Icon type="ios-people"></Icon>
-          我的联系练习
+          我的练习记录
       </Menu-item>
     </Menu>
   </Row>

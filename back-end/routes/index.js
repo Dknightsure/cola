@@ -67,17 +67,14 @@ var ExamBlankAnswer = new mongoose.Schema({
   answer: [SelectionSchema]
 })
 
-var ExamAnswer = new mongoose.Schema({
+var ExamSchema = new mongoose.Schema({
+  paperId: { type: String },
   user: { type: String },
   makeup: { type: Number },
+  date: { type: Number },
   singleQuestions: [ExamSingleAnswer],
   mutipleQuestions: [ExamMutipleAnswer],
   blankQuestions: [ExamBlankAnswer]
-})
-
-var ExamSchema = new mongoose.Schema({
-  paper: { type: String },
-  answers: [ExamAnswer]
 })
 
 var SingleQuestionModel = db.model('SingleQuestions', SingleQuestionSchema);
@@ -344,65 +341,47 @@ router.post('/api/get-paper-detail/', function (req, res, next) {
 })
 
 router.post('/api/add-exam-answer', function (req, res, next) {
-  var paperId = req.body._id;
-
-  var answer = {
+  var exam = new ExamModel({
+    paperId: req.body._id,
     user: USER,
-    makeup: 0
-  }
+    makeup: 0,
+    date: +new Date()
+  })
 
-  answer.singleQuestions = req.body.singleQuestions;
-  answer.mutipleQuestions = req.body.mutipleQuestions;
-  answer.blankQuestions = req.body.blankQuestions;
+  exam.singleQuestions = req.body.singleQuestions;
+  exam.mutipleQuestions = req.body.mutipleQuestions;
+  exam.blankQuestions = req.body.blankQuestions;
 
-  ExamModel.findOne({ paper: paperId }, function (err, paper) {
+  exam.save(function (err) {
     if (err) {
       console.log(err);
+      res.json('fail');
     } else {
-      if (paper === null) {
-        var exam = new ExamModel({
-          paper: paperId,
-          answers: []
-        });
-
-        exam.answers.push(answer);
-
-        exam.save(function (err) {
-          if (err) {
-            console.log(err)
-            res.json('fail')
-          } else {
-            res.json('success')
-          }
-        })
-      } else {
-        paper.answers.push(answer);
-        paper.save(function (err) {
-          if (!err) {
-            res.json('success')
-          } else {
-            res.json('fail');
-          }
-        })
-      }
+      res.json('success');
     }
-  })
+  });
 })
 
 router.post('/api/get-exam-list', function (req, res, next) {
   var user = req.body.user
-  ExamModel.find({ "answers.user": user }, function (err, exams) {
+  ExamModel.find({ "user": user }).lean().exec(function (err, exams) {
     if (!err) {
-      // TODO
+      var allQuery = []
       exams.forEach(function (exam) {
-        PaperModel.findById(exam.paper, function (err, paper) {
-          exam.name = paper.name
-          console.log('------------')
-          console.log(exam.name)
-          res.json(exam)
-        })
+        allQuery.push(new Promise((resolve, reject) => {
+          PaperModel.findById(exam.paperId, function (err, paper) {
+            exam.name = paper.name
+            resolve(exam)
+          })
+        }))
       });
-      // res.json(exams);
+
+      Promise.all(allQuery).then(data => {
+        res.json(data)
+      }).catch(err => {
+        console.log(err)
+        res.json('fail')
+      })
     } else {
       res.json('fail')
     }

@@ -31,12 +31,20 @@ export default {
             }
         },
         {
+            title: '考试提交时间',
+            key: 'date'
+        },
+        {
+            title: '类型',
+            key: 'makeup'
+        },
+        {
             title: '操作',
             key: 'action',
             width: 150,
             align: 'center',
             render (row, column, index) {
-                return `<i-button type="primary" size="small" @click="enter(${index})">查看结果</i-button>`;
+                return `<i-button type="primary" size="small" @click="show(${index})">查看结果</i-button>`;
             }
         }
       ],
@@ -55,10 +63,22 @@ export default {
       const user = USER;
       self.data = [];
       new PaperIO().getExam({user}).then(res => {
-        console.log(res.data);
+        res.data.forEach(function(exam){
+          let tmp = {};
+          tmp.name = exam.name;
+          tmp.date = new Date(exam.date);
+          tmp.paperId = exam.paperId;
+          tmp.makeup = exam.makeup == 0 ? '普通考试': '补考';
+          tmp.examId = exam._id
+          self.data.push(tmp);
+        })
       }).catch(err => {
         self.$Message.error('获取考试记录失败！')
       })
+    },
+
+    show (index) {
+      console.log(index)
     },
 
     paperCarHide () {
