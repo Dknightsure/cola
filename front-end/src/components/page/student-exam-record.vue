@@ -20,6 +20,7 @@ import $ from 'jquery'
 import PaperIO from '../../io/PaperIO'
 import Bus from '../bus'
 import ExamResult from '../sub/exam-result'
+import moment from 'moment'
 
 export default {
   data () {
@@ -69,7 +70,7 @@ export default {
         res.data.forEach(function(exam){
           let tmp = {};
           tmp.name = exam.name;
-          tmp.date = new Date(exam.date);
+          tmp.date = moment(exam.date).local().format("dddd, MMMM Do YYYY, h:mm:ss a");
           tmp.paperId = exam.paperId;
           tmp.makeup = exam.makeup == 0 ? '普通考试': '补考';
           tmp.examId = exam._id

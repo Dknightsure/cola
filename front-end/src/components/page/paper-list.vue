@@ -108,12 +108,16 @@ export default {
             key: 'date'
         },
         {
+            title: '类型',
+            key: 'type'
+        },
+        {
             title: '操作',
             key: 'action',
-            width: 150,
+            width: 250,
             align: 'center',
             render (row, column, index) {
-                return `<i-button type="primary" size="small" @click="showDetail(${index})">查看</i-button> <i-button type="error" size="small" @click="deleteConfirm(${index})">删除</i-button>`;
+                return `<i-button type="primary" size="small" @click="changeToPractice(${index})">发布为练习</i-button> <i-button type="primary" size="small" @click="showDetail(${index})">查看</i-button> <i-button type="error" size="small" @click="deleteConfirm(${index})">删除</i-button>`;
             }
         }
       ],
@@ -135,6 +139,7 @@ export default {
           let paper = {};
           paper.name = paperList[i].name;
           paper.date = new Date(paperList[i].date);
+          paper.type = paperList[i].type == 'exam' ? '考试卷' : '练习卷'
           paper._id = paperList[i]._id;
           self.data.push(paper);
         }
@@ -167,16 +172,31 @@ export default {
       const index = this.removeIndex;
       const id = this.data[index]._id;
       new PaperIO().delete({id}).then(res => {
-        this.$Message.success('删除成功！');
+        self.$Message.success('删除成功！');
         self.close();
         self.fetchData();
       }).catch(err => {
-        this.$Message.error('删除失败！');
+        self.$Message.error('删除失败！');
       })
     },
 
     cancel () {
       this.$Message.info('取消删除！');
+    },
+
+    changeToPractice (index) {
+      const self = this
+      const id = this.data[index]._id
+      new PaperIO().changeToPractice({id}).then(res => {
+        if(res.data === 'changed'){
+          self.$Message.success('改试卷已经发布为练习！');
+          return;
+        }
+        self.$Message.success('发布为练习成功！');
+        self.fetchData();
+      }).catch(err => {
+        self.$Message.error('发布为练习失败！');
+      })
     }
   },
   

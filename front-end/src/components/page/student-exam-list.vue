@@ -25,6 +25,7 @@ import NAME from '../../router/name'
 import StudentNav from '../sub/student-nav'
 import PaperIO from '../../io/PaperIO'
 import $ from 'jquery'
+import moment from 'moment'
 
 export default {
   data () {
@@ -67,12 +68,12 @@ export default {
     fetchData () {
       const self = this;
       self.data = []
-      new PaperIO().getList().then(res => {
+      new PaperIO().getExamList().then(res => {
         let paperList = res.data;
         for(let i = 0; i < paperList.length; i++){
           let paper = {};
           paper.name = paperList[i].name;
-          paper.date = new Date(paperList[i].date);
+          paper.date = moment(paperList[i].date).local().format("dddd, MMMM Do YYYY, h:mm:ss a")
           paper._id = paperList[i]._id;
           self.data.push(paper);
         }

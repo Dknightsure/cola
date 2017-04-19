@@ -12,5 +12,6 @@ export default {
   STUDENT_PRACTICE_LIST: 'student-practice-list',
   STUDENT_EXAM: 'student-exam',
   EXAM_RECORD: 'exam-record',
-  PRACTICE_RECORD: 'practice-record'
+  PRACTICE_RECORD: 'practice-record',
+  STUDENT_PRACTICE: 'student-practice'
 }

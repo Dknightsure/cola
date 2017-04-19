@@ -47,6 +47,14 @@ var BlankQuestionSchema = new mongoose.Schema({
 var PaperSchema = new mongoose.Schema({
   name: { type: String },
   date: { type: Number },
+  type: {
+    type: String,
+    default: 'exam'
+  },
+  time: {
+    type: Number,
+    default: 30
+  },
   singleQuestions: [SingleQuestionSchema],
   mutipleQuestions: [MutipleQuestionSchema],
   blankQuestions: [BlankQuestionSchema]
@@ -77,11 +85,21 @@ var ExamSchema = new mongoose.Schema({
   blankQuestions: [ExamBlankAnswer]
 })
 
+var PracticeSchema = new mongoose.Schema({
+  paperId: { type: String },
+  user: { type: String },
+  date: { type: Number },
+  singleQuestions: [ExamSingleAnswer],
+  mutipleQuestions: [ExamMutipleAnswer],
+  blankQuestions: [ExamBlankAnswer]
+})
+
 var SingleQuestionModel = db.model('SingleQuestions', SingleQuestionSchema);
 var MutipleQuestionModel = db.model('MutipleQuestions', MutipleQuestionSchema);
 var BlankQuestionModel = db.model('BlankQuestions', BlankQuestionSchema);
 var PaperModel = db.model('Papers', PaperSchema);
 var ExamModel = db.model('Exams', ExamSchema);
+var PracticeModel = db.model('Practices', PracticeSchema);
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -362,6 +380,37 @@ router.post('/api/add-exam-answer', function (req, res, next) {
   });
 })
 
+router.post('/api/add-practice-answer', function (req, res, next) {
+  var practice = new PracticeModel({
+    paperId: req.body._id,
+    user: USER,
+    date: +new Date()
+  })
+
+  practice.singleQuestions = req.body.singleQuestions;
+  practice.mutipleQuestions = req.body.mutipleQuestions;
+  practice.blankQuestions = req.body.blankQuestions;
+
+  practice.save(function (err) {
+    if (err) {
+      console.log(err)
+      res.json('fail')
+    } else {
+      res.json('success')
+    }
+  })
+})
+
+router.post('/api/get-exams', function (req, res, next) {
+  PaperModel.find({ "type": "exam" }, function (err, data) {
+    if (!err) {
+      res.json(data)
+    } else {
+      res.json('fail')
+    }
+  })
+})
+
 router.post('/api/get-exam-list', function (req, res, next) {
   var user = req.body.user
   ExamModel.find({ "user": user }).lean().exec(function (err, exams) {
@@ -421,5 +470,97 @@ router.post('/api/get-exam-result', function (req, res, next) {
     res.json('fail')
   })
 })
+
+router.post('/api/get-practice-result', function (req, res, next) {
+  var paperId = req.body.paperId;
+  var practiceId = req.body.practiceId;
+
+  var queryPaper = new Promise((resolve, reject) => {
+    PaperModel.findById(paperId).lean().exec(function (err, paper) {
+      if (!err) {
+        resolve(paper)
+      } else {
+        reject(err)
+      }
+    })
+  })
+
+  var queryPractice = new Promise((resolve, reject) => {
+    PracticeModel.findById(practiceId).lean().exec(function (err, practice) {
+      if (!err) {
+        resolve(practice)
+      } else {
+        reject(err)
+      }
+    })
+  })
+
+  Promise.all([queryPaper, queryPractice]).then(data => {
+    res.json({
+      paper: data[0],
+      practice: data[1]
+    })
+  }).catch(err => {
+    res.json('fail')
+  })
+})
+
+router.post('/api/changeToPractice', function (req, res, next) {
+  var id = req.body.id;
+  PaperModel.findById(id, function (err, paper) {
+    if (!err) {
+      if (paper.type === 'practice') {
+        res.json('changed')
+        return;
+      }
+      paper.type = 'practice';
+      paper.save(function (err) {
+        if (!err) {
+          res.json('sucess')
+        } else {
+          res.json('fail')
+        }
+      })
+    }
+  })
+})
+
+router.post('/api/get-practice-list', function (req, res, next) {
+  PaperModel.find({ "type": "practice" }, function (err, data) {
+    if (!err) {
+      res.json(data)
+    } else {
+      res.json('fail')
+    }
+  })
+})
+
+router.post('/api/get-practice-record', function (req, res, next) {
+  var user = req.body.user
+  PracticeModel.find({ "user": user }).lean().exec(function (err, practices) {
+    if (!err) {
+      var allQuery = []
+      practices.forEach(function (practice) {
+        allQuery.push(new Promise((resolve, reject) => {
+          PaperModel.findById(practice.paperId, function (err, paper) {
+            practice.name = paper.name
+            resolve(practice)
+          })
+        }))
+      });
+
+      Promise.all(allQuery).then(data => {
+        res.json(data)
+      }).catch(err => {
+        console.log(err)
+        res.json('fail')
+      })
+    } else {
+      res.json('fail')
+    }
+  })
+})
+
+
 
 module.exports = router;

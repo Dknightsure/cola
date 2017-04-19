@@ -74,4 +74,64 @@ PaperIO.prototype.getExamResult = function (data) {
   })
 }
 
+PaperIO.prototype.changeToPractice = function (data) {
+  let obj = this.api.changeToPractice;
+
+  return this.axios({
+    method: obj.method,
+    url: obj.url,
+    data: data
+  })
+}
+
+PaperIO.prototype.getPracticeList = function (data) {
+  let obj = this.api.getPracticeList;
+
+  return this.axios({
+    method: obj.method,
+    url: obj.url,
+    data: data
+  })
+}
+
+PaperIO.prototype.getExamList = function (data) {
+  let obj = this.api.getExamList;
+
+  return this.axios({
+    method: obj.method,
+    url: obj.url,
+    data: data
+  })
+}
+
+PaperIO.prototype.addPractice = function (data) {
+  let obj = this.api.addPractice;
+
+  return this.axios({
+    method: obj.method,
+    url: obj.url,
+    data: data
+  })
+}
+
+PaperIO.prototype.getPracticeRecord = function (data) {
+  let obj = this.api.getPracticeRecord;
+
+  return this.axios({
+    method: obj.method,
+    url: obj.url,
+    data: data
+  })
+}
+
+PaperIO.prototype.getPracticeResult = function (data) {
+  let obj = this.api.getPracticeResult;
+
+  return this.axios({
+    method: obj.method,
+    url: obj.url,
+    data: data
+  })
+}
+
 export default PaperIO

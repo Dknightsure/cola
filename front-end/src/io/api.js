@@ -96,5 +96,35 @@ export default {
   getExamResult: {
     url: '/api/get-exam-result',
     method: 'POST'
+  },
+
+  getExamList: {
+    url: '/api/get-exams',
+    method: 'POST'
+  },
+
+  changeToPractice: {
+    url: '/api/changeToPractice',
+    method: 'POST'
+  },
+
+  getPracticeList: {
+    url: '/api/get-practice-list',
+    method: 'POST'
+  },
+
+  addPractice: {
+    url: '/api/add-practice-answer',
+    method: 'POST'
+  },
+
+  getPracticeRecord: {
+    url: '/api/get-practice-record',
+    method: 'POST'
+  },
+
+  getPracticeResult: {
+    url: '/api/get-practice-result',
+    method: 'POST'
   }
 }
