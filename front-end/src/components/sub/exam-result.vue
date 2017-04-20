@@ -11,17 +11,22 @@
     width="800">
     <div v-for="(item, index) in paper.singleQuestions" :question="item" :key="index">
       <single-item :question="item"></single-item>
-      <p class="answer">你的答案：{{ exam.singleQuestions[index].answer | indexToSelection('选项') }}</p>
+      <Alert :type="exam.singleQuestions[index].result ? 'success': 'error'" show-icon>
+        <span slot="desc">你的答案：{{ exam.singleQuestions[index].answer | indexToSelection('选项') }}</span>
+      </Alert>
     </div>
     <div v-for="(item, index) in paper.mutipleQuestions" :question="item" :key="index">
       <mutiple-item :question="item"></mutiple-item>
-      <p  class="answer">你的答案：{{ exam.mutipleQuestions[index].answer | mutipleAnswer }}</p>
+      <Alert :type="exam.mutipleQuestions[index].result ? 'success': 'error'" show-icon>
+        <span slot="desc">你的答案：{{ exam.mutipleQuestions[index].answer | mutipleAnswer }}</span>
+      </Alert>
     </div>
     <div v-for="(item, index) in paper.blankQuestions" :key="index">
       <blank-item :question="item"></blank-item>
-      <p  class="answer">你的答案：{{ exam.blankQuestions[index].selections | blankAnswer }}</p>
+      <Alert :type="exam.blankQuestions[index].result ? 'success': 'error'" show-icon>
+        <span slot="desc">你的答案：{{ exam.blankQuestions[index].selections | blankAnswer }}</span>
+      </Alert>
     </div>
-    
     <div slot="footer"></div>
   </Modal>
 </template>

@@ -66,17 +66,20 @@ var PaperSchema = new mongoose.Schema({
 
 var ExamSingleAnswer = new mongoose.Schema({
   questionId: { type: String },
-  answer: { type: Number }
+  answer: { type: Number },
+  result: { type: Boolean }
 })
 
 var ExamMutipleAnswer = new mongoose.Schema({
   questionId: { type: String },
-  answer: { type: Array }
+  answer: { type: Array },
+  result: { type: Boolean }
 })
 
 var ExamBlankAnswer = new mongoose.Schema({
   questionId: { type: String },
-  selections: [SelectionSchema]
+  selections: [SelectionSchema],
+  result: { type: Boolean }
 })
 
 var ExamSchema = new mongoose.Schema({
@@ -84,7 +87,7 @@ var ExamSchema = new mongoose.Schema({
   user: { type: String },
   makeup: { type: Number, default: 0 },
   date: { type: Number },
-  result: { type: String },
+  result: { type: Boolean },
   singleQuestions: [ExamSingleAnswer],
   mutipleQuestions: [ExamMutipleAnswer],
   blankQuestions: [ExamBlankAnswer]
@@ -364,8 +367,9 @@ router.post('/api/get-paper-detail/', function (req, res, next) {
 })
 
 router.post('/api/add-exam-answer', function (req, res, next) {
+  const paperId = req.body._id
   var queryPastExam = new Promise((resolve, reject) => {
-    ExamModel.find({ "paperId": req.body._id, "user": USER }, function (err, data) {
+    ExamModel.find({ "paperId": paperId, "user": USER }, function (err, data) {
       if (!err) {
         resolve(data)
       } else {
@@ -388,7 +392,7 @@ router.post('/api/add-exam-answer', function (req, res, next) {
     }
 
     var exam = new ExamModel({
-      paperId: req.body._id,
+      paperId: paperId,
       user: USER,
       makeup: makeup,
       date: +new Date()
@@ -397,15 +401,53 @@ router.post('/api/add-exam-answer', function (req, res, next) {
     exam.singleQuestions = req.body.singleQuestions;
     exam.mutipleQuestions = req.body.mutipleQuestions;
     exam.blankQuestions = req.body.blankQuestions;
+    var questionNum = exam.singleQuestions.length + exam.mutipleQuestions.length + exam.blankQuestions.length
 
-    exam.save(function (err) {
-      if (err) {
-        console.log(err);
-        res.json('fail');
-      } else {
-        res.json('success');
+    PaperModel.findById(paperId, function (err, paper) {
+      var rightQuestionNum = 0;
+      for (let i = 0; i < exam.singleQuestions.length; i++) {
+        if (exam.singleQuestions[i].answer == paper.singleQuestions[i].answer) {
+          exam.singleQuestions[i].result = true;
+          rightQuestionNum++;
+        } else {
+          exam.singleQuestions[i].result = false;
+        }
       }
-    });
+
+      for (let i = 0; i < exam.mutipleQuestions.length; i++) {
+        if (JSON.stringify(exam.mutipleQuestions[i].answer) == JSON.stringify(paper.mutipleQuestions[i].answer)) {
+          exam.mutipleQuestions[i].result = true;
+          rightQuestionNum++;
+        } else {
+          exam.mutipleQuestions[i].result = false;
+        }
+      }
+
+      for (let i = 0; i < exam.blankQuestions.length; i++) {
+        if (JSON.stringify(exam.blankQuestions[i].selections) == JSON.stringify(paper.blankQuestions[i].selections)) {
+          exam.blankQuestions[i].result = true;
+          rightQuestionNum++;
+        } else {
+          exam.blankQuestions[i].result = false;
+        }
+      }
+
+      if (rightQuestionNum >= Math.ceil(questionNum / 2)) {
+        exam.result = true;
+      } else {
+        exam.result = false;
+      }
+
+      exam.save(function (err) {
+        if (err) {
+          console.log(err);
+          res.json('fail');
+        } else {
+          res.json('success');
+        }
+      });
+
+    })
   })
 })
 
@@ -438,9 +480,21 @@ router.post('/api/get-exams', function (req, res, next) {
         var makeup = paper.makeup;
         queryExam.push(new Promise((resolve, reject) => {
           ExamModel.find({ "paperId": paper._id, "user": USER }, function (err, exams) {
-            // TODO exams.length <= makeup 是还有补考次数，可以补考，但是如果其中某次考试通过了，就不给补考机会了。此处要遍历 exams 确认考试成绩
+            // exams.length <= makeup 是还有补考次数
             if (exams.length <= makeup) {
-              resolve(paper)
+              var isPassed = false;
+              exams.forEach(function (exam) {
+                if (exam.result == true) {
+                  isPassed = true
+                }
+              })
+
+              if (isPassed == true) {
+                resolve(null)
+              } else {
+                resolve(paper)
+              }
+
             } else {
               resolve(null)
             }

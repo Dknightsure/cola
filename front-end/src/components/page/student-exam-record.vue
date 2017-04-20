@@ -43,12 +43,16 @@ export default {
             key: 'makeup'
         },
         {
+            title: '最终结果',
+            key: 'result'
+        },
+        {
             title: '操作',
             key: 'action',
             width: 150,
             align: 'center',
             render (row, column, index) {
-                return `<i-button type="primary" size="small" @click="show(${index})">查看结果</i-button>`;
+                return `<i-button type="primary" size="small" @click="show(${index})">查看详细结果</i-button>`;
             }
         }
       ],
@@ -73,6 +77,7 @@ export default {
           tmp.date = moment(exam.date).local().format("dddd, MMMM Do YYYY, h:mm:ss a");
           tmp.paperId = exam.paperId;
           tmp.makeup = exam.makeup == 0 ? '普通考试': '第 ' + exam.makeup + ' 次补考';
+          tmp.result = exam.result ? '合格' : '不合格';
           tmp.examId = exam._id
           self.data.push(tmp);
         })
