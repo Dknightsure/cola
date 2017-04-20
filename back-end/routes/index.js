@@ -55,6 +55,10 @@ var PaperSchema = new mongoose.Schema({
     type: Number,
     default: 30
   },
+  makeup: {
+    type: Number,
+    default: 1
+  },
   singleQuestions: [SingleQuestionSchema],
   mutipleQuestions: [MutipleQuestionSchema],
   blankQuestions: [BlankQuestionSchema]
@@ -78,7 +82,7 @@ var ExamBlankAnswer = new mongoose.Schema({
 var ExamSchema = new mongoose.Schema({
   paperId: { type: String },
   user: { type: String },
-  makeup: { type: Number },
+  makeup: { type: Number, default: 0 },
   date: { type: Number },
   singleQuestions: [ExamSingleAnswer],
   mutipleQuestions: [ExamMutipleAnswer],
@@ -359,25 +363,49 @@ router.post('/api/get-paper-detail/', function (req, res, next) {
 })
 
 router.post('/api/add-exam-answer', function (req, res, next) {
-  var exam = new ExamModel({
-    paperId: req.body._id,
-    user: USER,
-    makeup: 0,
-    date: +new Date()
+  var queryPastExam = new Promise((resolve, reject) => {
+    ExamModel.find({ "paperId": req.body._id, "user": USER }, function (err, data) {
+      if (!err) {
+        resolve(data)
+      } else {
+        reject(data)
+      }
+    })
   })
 
-  exam.singleQuestions = req.body.singleQuestions;
-  exam.mutipleQuestions = req.body.mutipleQuestions;
-  exam.blankQuestions = req.body.blankQuestions;
+  var makeup;
 
-  exam.save(function (err) {
-    if (err) {
-      console.log(err);
-      res.json('fail');
+  queryPastExam.then(function (data) {
+    if (data.length == 0) {
+      makeup = 0;
     } else {
-      res.json('success');
+      data.sort(function (exam1, exam2) {
+        return exam2.makeup - exam1.makeup
+      })
+
+      makeup = data[0].makeup + 1
     }
-  });
+
+    var exam = new ExamModel({
+      paperId: req.body._id,
+      user: USER,
+      makeup: makeup,
+      date: +new Date()
+    })
+
+    exam.singleQuestions = req.body.singleQuestions;
+    exam.mutipleQuestions = req.body.mutipleQuestions;
+    exam.blankQuestions = req.body.blankQuestions;
+
+    exam.save(function (err) {
+      if (err) {
+        console.log(err);
+        res.json('fail');
+      } else {
+        res.json('success');
+      }
+    });
+  })
 })
 
 router.post('/api/add-practice-answer', function (req, res, next) {

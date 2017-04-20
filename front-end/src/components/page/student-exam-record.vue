@@ -72,7 +72,7 @@ export default {
           tmp.name = exam.name;
           tmp.date = moment(exam.date).local().format("dddd, MMMM Do YYYY, h:mm:ss a");
           tmp.paperId = exam.paperId;
-          tmp.makeup = exam.makeup == 0 ? '普通考试': '补考';
+          tmp.makeup = exam.makeup == 0 ? '普通考试': '第 ' + exam.makeup + ' 次补考';
           tmp.examId = exam._id
           self.data.push(tmp);
         })

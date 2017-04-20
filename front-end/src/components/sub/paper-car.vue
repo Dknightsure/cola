@@ -138,8 +138,9 @@ export default {
       }
 
       new PaperIO().addPaper(paper).then(res => {
+        Bus.$emit('reload-paper-list');
         self.$Message.success('发布试卷成功！')
-      }).catch(err => {
+      }, err => {
         self.$Message.error('发布试卷失败！')
       })
     }

@@ -126,7 +126,11 @@ export default {
   },
 
   mounted () {
+    const self = this
     this.fetchData();
+    Bus.$on('reload-paper-list', () => {
+      self.fetchData();
+    })
   },
 
   methods: {
