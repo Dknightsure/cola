@@ -68,7 +68,7 @@ export default {
     fetchData () {
       const self = this;
       self.data = []
-      new PaperIO().getExamList().then(res => {
+      new PaperIO().getExamList({user:USER}).then(res => {
         let paperList = res.data;
         for(let i = 0; i < paperList.length; i++){
           let paper = {};

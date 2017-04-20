@@ -84,6 +84,7 @@ var ExamSchema = new mongoose.Schema({
   user: { type: String },
   makeup: { type: Number, default: 0 },
   date: { type: Number },
+  result: { type: String },
   singleQuestions: [ExamSingleAnswer],
   mutipleQuestions: [ExamMutipleAnswer],
   blankQuestions: [ExamBlankAnswer]
@@ -432,7 +433,31 @@ router.post('/api/add-practice-answer', function (req, res, next) {
 router.post('/api/get-exams', function (req, res, next) {
   PaperModel.find({ "type": "exam" }, function (err, data) {
     if (!err) {
-      res.json(data)
+      var queryExam = [];
+      data.forEach(function (paper) {
+        var makeup = paper.makeup;
+        queryExam.push(new Promise((resolve, reject) => {
+          ExamModel.find({ "paperId": paper._id, "user": USER }, function (err, exams) {
+            // TODO exams.length <= makeup 是还有补考次数，可以补考，但是如果其中某次考试通过了，就不给补考机会了。此处要遍历 exams 确认考试成绩
+            if (exams.length <= makeup) {
+              resolve(paper)
+            } else {
+              resolve(null)
+            }
+          })
+        }))
+      })
+
+      var result = []
+      Promise.all(queryExam).then(function (data) {
+        data.forEach(function (paper) {
+          if (paper != null) {
+            result.push(paper)
+          }
+        })
+        res.json(result)
+      })
+
     } else {
       res.json('fail')
     }
