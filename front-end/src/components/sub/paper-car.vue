@@ -69,6 +69,7 @@
 <template>
   <div class="container-paper-car">
     <Input v-model="name" placeholder="试卷标题..." style="width: 300px"></Input>
+    <Input v-model.number="time" placeholder="考试时间" style="width: 300px"></Input>
     <ul>
       <li v-for="(question, index) in questions">
         {{ question.title }}
@@ -89,6 +90,7 @@ export default {
   data () {
     return {
       name: '',
+      time: null,
       questions: []
     }
   },
@@ -115,6 +117,7 @@ export default {
       const self = this;
       const paper = {
         name: self.name,
+        time: self.time,
         singleQuestions: [],
         mutipleQuestions: [],
         blankQuestions: []

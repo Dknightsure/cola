@@ -302,7 +302,8 @@ router.post('/api/remove-paper', function (req, res, next) {
 router.post('/api/add-paper', function (req, res, next) {
   var paper = new PaperModel({
     name: req.body.name,
-    date: +new Date
+    date: +new Date,
+    time: req.body.time
   });
 
   //添加单选

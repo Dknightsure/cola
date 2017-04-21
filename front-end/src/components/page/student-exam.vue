@@ -7,12 +7,17 @@
   .question-item {
     margin: 0 0 20px 0;
   }
+
+  .count-down {
+    float: left;
+  }
 </style>
 
 <template>
   <Row>
     <Col span="12" offset="6">
       <h1>{{ paper.name }}</h1>
+      <count-down :date="paper.time" v-on:timeDown="ok"></count-down>
       <single-item v-for="(question, index) in paper.singleQuestions" :question="question" :key="index" class="question-item"></single-item>
       <mutiple-item v-for="(question, index) in paper.mutipleQuestions" :question="question" :key="index" class="question-item"></mutiple-item>
       <blank-item v-for="(question, index) in paper.blankQuestions" :question="question" :key="index" class="question-item"></blank-item>
@@ -36,6 +41,8 @@ import BlankItem from '../sub/exam-blank-item'
 import $ from 'jquery'
 import utils from '../../utils'
 import _ from 'lodash'
+import CountDown from '../sub/count-down'
+import NAME from '../../router/name'
 
 export default {
   data () {
@@ -99,7 +106,10 @@ export default {
       const self = this;
       new PaperIO().addExam(this.paper).then(res => {
         self.$Message.success('提交成功！')
-      }).catch(err => {
+        self.$router.push({
+          name: NAME.STUDENT_EXAM_LIST
+        })
+      }, err => {
         self.$Message.error('提交失败！')
       })
     },
@@ -113,7 +123,8 @@ export default {
   components: {
     SingleItem,
     MutipleItem,
-    BlankItem
+    BlankItem,
+    CountDown
   }
 }
 </script>
