@@ -481,7 +481,12 @@ router.post('/api/get-exams', function (req, res, next) {
         queryExam.push(new Promise((resolve, reject) => {
           ExamModel.find({ "paperId": paper._id, "user": USER }, function (err, exams) {
             // exams.length <= makeup 是还有补考次数
+            var type = '补考';
             if (exams.length <= makeup) {
+              if (exams.length == 0) {
+                type = '普通考试'
+              }
+
               var isPassed = false;
               exams.forEach(function (exam) {
                 if (exam.result == true) {
@@ -492,6 +497,7 @@ router.post('/api/get-exams', function (req, res, next) {
               if (isPassed == true) {
                 resolve(null)
               } else {
+                paper.type = type;
                 resolve(paper)
               }
 

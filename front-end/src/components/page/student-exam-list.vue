@@ -46,6 +46,10 @@ export default {
             key: 'date'
         },
         {
+            title: '考试类型',
+            key: 'type'
+        },
+        {
             title: '操作',
             key: 'action',
             width: 150,
@@ -75,6 +79,7 @@ export default {
           paper.name = paperList[i].name;
           paper.date = moment(paperList[i].date).local().format("dddd, MMMM Do YYYY, h:mm:ss a")
           paper._id = paperList[i]._id;
+          paper.type = paperList[i].type;
           self.data.push(paper);
         }
       }).catch(err => {
