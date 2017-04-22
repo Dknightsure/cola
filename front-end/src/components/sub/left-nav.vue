@@ -40,6 +40,7 @@ h1 {
             <Menu-item name="add-single">单选题</Menu-item>
             <Menu-item name="add-mutiple">多选题</Menu-item>
             <Menu-item name="add-blank">填空题</Menu-item>
+            <Menu-item name="add-judgement">判断题</Menu-item>
         </Submenu>
     </Menu>
 </template>
@@ -80,6 +81,11 @@ export default {
           this.$router.push({
             name: NAME.ADD_BLANK
           });
+          break;
+        case 'add-judgement':
+          this.$router.push({
+            name: NAME.ADD_JUDGEMENT
+          })
           break;
         case 'paper-list':
           this.$router.push({

@@ -18,6 +18,11 @@ export default {
     method: 'POST'
   },
 
+  addJudgement: {
+    url: '/api/add-judgement-question',
+    method: 'POST'
+  },
+
   getSingleList: {
     url: '/api/query-single-question',
     method: 'GET'

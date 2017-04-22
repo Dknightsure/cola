@@ -6,6 +6,7 @@ export default {
   BLANK_LIST: 'blank-list',
   ADD_SINGLE: 'add-single',
   ADD_MUTIPLE: 'add-mutiple',
+  ADD_JUDGEMENT: 'add-judgement',
   ADD_BLANK: 'add-blank',
   PAPER_LIST: 'paper-list',
   STUDENT_EXAM_LIST: 'student-exam-list',

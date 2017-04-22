@@ -44,6 +44,13 @@ var BlankQuestionSchema = new mongoose.Schema({
   type: { type: String }
 });
 
+var JudgementQuestionSchema = new mongoose.Schema({
+  title: { type: String },
+  difficulty: { type: Number },
+  answer: { type: Number },
+  type: { type: String }
+})
+
 var PaperSchema = new mongoose.Schema({
   name: { type: String },
   date: { type: Number },
@@ -105,6 +112,7 @@ var PracticeSchema = new mongoose.Schema({
 var SingleQuestionModel = db.model('SingleQuestions', SingleQuestionSchema);
 var MutipleQuestionModel = db.model('MutipleQuestions', MutipleQuestionSchema);
 var BlankQuestionModel = db.model('BlankQuestions', BlankQuestionSchema);
+var JudgementQuestionModel = db.model('JudgementQuestions', JudgementQuestionSchema);
 var PaperModel = db.model('Papers', PaperSchema);
 var ExamModel = db.model('Exams', ExamSchema);
 var PracticeModel = db.model('Practices', PracticeSchema);
@@ -250,6 +258,24 @@ router.post('/api/add-blank-question', function (req, res, next) {
     }
   });
 });
+
+router.post('/api/add-judgement-question', function (req, res, next) {
+  var question = new JudgementQuestionModel({
+    title: req.body.title,
+    answer: req.body.answer,
+    difficulty: req.body.difficulty,
+    type: 'judgement'
+  })
+
+  question.save(function (err, ques) {
+    if (err) {
+      console.log(err);
+      res.json('fail');
+    } else {
+      res.json('success');
+    }
+  });
+})
 
 router.post('/api/remove-single-question', function (req, res, next) {
   var id = ObjectId(req.body.id);

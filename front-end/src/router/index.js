@@ -6,6 +6,7 @@ import BlankList from '@/components/page/blank-list'
 import AddSignle from '@/components/page/add-single'
 import AddMutiple from '@/components/page/add-mutiple'
 import AddBlank from '@/components/page/add-blank'
+import AddJudgement from '@/components/page/add-judgement'
 import PaperList from '@/components/page/paper-list'
 import StudentExamList from '@/components/page/student-exam-list'
 import StudentPracticeList from '@/components/page/student-practice-list'
@@ -43,6 +44,10 @@ export default new Router({
     path: '/add/blank',
     name: NAME.ADD_BLANK,
     component: AddBlank
+  }, {
+    path: '/add/judgement',
+    name: NAME.ADD_JUDGEMENT,
+    component: AddJudgement
   }, {
     path: '/papers',
     name: NAME.PAPER_LIST,
