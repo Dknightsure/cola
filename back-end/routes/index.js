@@ -68,7 +68,8 @@ var PaperSchema = new mongoose.Schema({
   },
   singleQuestions: [SingleQuestionSchema],
   mutipleQuestions: [MutipleQuestionSchema],
-  blankQuestions: [BlankQuestionSchema]
+  blankQuestions: [BlankQuestionSchema],
+  judgementQuestions: [JudgementQuestionSchema]
 });
 
 var ExamSingleAnswer = new mongoose.Schema({
@@ -89,6 +90,12 @@ var ExamBlankAnswer = new mongoose.Schema({
   result: { type: Boolean }
 })
 
+var ExamJudgementAnswer = new mongoose.Schema({
+  questionId: { type: String },
+  answer: { type: Number },
+  result: { type: Boolean }
+})
+
 var ExamSchema = new mongoose.Schema({
   paperId: { type: String },
   user: { type: String },
@@ -97,7 +104,8 @@ var ExamSchema = new mongoose.Schema({
   result: { type: Boolean },
   singleQuestions: [ExamSingleAnswer],
   mutipleQuestions: [ExamMutipleAnswer],
-  blankQuestions: [ExamBlankAnswer]
+  blankQuestions: [ExamBlankAnswer],
+  judgementQuestions: [ExamJudgementAnswer]
 })
 
 var PracticeSchema = new mongoose.Schema({
@@ -106,7 +114,8 @@ var PracticeSchema = new mongoose.Schema({
   date: { type: Number },
   singleQuestions: [ExamSingleAnswer],
   mutipleQuestions: [ExamMutipleAnswer],
-  blankQuestions: [ExamBlankAnswer]
+  blankQuestions: [ExamBlankAnswer],
+  judgementQuestions: [ExamJudgementAnswer]
 })
 
 var SingleQuestionModel = db.model('SingleQuestions', SingleQuestionSchema);
@@ -370,7 +379,7 @@ router.post('/api/add-paper', function (req, res, next) {
     time: req.body.time
   });
 
-  //添加单选
+  // 添加单选
   for (var i = 0; i < req.body.singleQuestions.length; i++) {
     var q = req.body.singleQuestions[i];
     var question = {
@@ -382,7 +391,7 @@ router.post('/api/add-paper', function (req, res, next) {
     paper.singleQuestions.push(question);
   }
 
-  //添加多选
+  // 添加多选
   for (var j = 0; j < req.body.mutipleQuestions.length; j++) {
     var q = req.body.mutipleQuestions[j];
     var question = {
@@ -394,7 +403,7 @@ router.post('/api/add-paper', function (req, res, next) {
     paper.mutipleQuestions.push(question);
   }
 
-  //添加填空
+  // 添加填空
   for (var k = 0; k < req.body.blankQuestions.length; k++) {
     var q = req.body.blankQuestions[k];
     var question = {
@@ -403,6 +412,17 @@ router.post('/api/add-paper', function (req, res, next) {
       difficulty: q.difficulty
     }
     paper.blankQuestions.push(question);
+  }
+
+  // 添加判断题
+  for (var n = 0; n < req.body.judgementQuestions.length; n++) {
+    var q = req.body.judgementQuestions[n];
+    var question = {
+      title: q.title,
+      answer: q.answer,
+      difficulty: q.difficulty
+    }
+    paper.judgementQuestions.push(question)
   }
 
   paper.save(function (err, ques) {
@@ -466,7 +486,8 @@ router.post('/api/add-exam-answer', function (req, res, next) {
     exam.singleQuestions = req.body.singleQuestions;
     exam.mutipleQuestions = req.body.mutipleQuestions;
     exam.blankQuestions = req.body.blankQuestions;
-    var questionNum = exam.singleQuestions.length + exam.mutipleQuestions.length + exam.blankQuestions.length
+    exam.judgementQuestions = req.body.judgementQuestions;
+    var questionNum = exam.singleQuestions.length + exam.mutipleQuestions.length + exam.blankQuestions.length + exam.judgementQuestions.length;
 
     PaperModel.findById(paperId, function (err, paper) {
       var rightQuestionNum = 0;
@@ -494,6 +515,15 @@ router.post('/api/add-exam-answer', function (req, res, next) {
           rightQuestionNum++;
         } else {
           exam.blankQuestions[i].result = false;
+        }
+      }
+
+      for (let i = 0; i < exam.judgementQuestions.length; i++) {
+        if (exam.judgementQuestions[i].answer == paper.judgementQuestions[i].answer) {
+          exam.judgementQuestions[i].result = true;
+          rightQuestionNum++;
+        } else {
+          exam.judgementQuestions[i].result = false;
         }
       }
 
@@ -526,6 +556,7 @@ router.post('/api/add-practice-answer', function (req, res, next) {
   practice.singleQuestions = req.body.singleQuestions;
   practice.mutipleQuestions = req.body.mutipleQuestions;
   practice.blankQuestions = req.body.blankQuestions;
+  practice.judgementQuestions = req.body.judgementQuestions;
 
   practice.save(function (err) {
     if (err) {

@@ -27,6 +27,12 @@
         <span slot="desc">你的答案：{{ exam.blankQuestions[index].selections | blankAnswer }}</span>
       </Alert>
     </div>
+    <div v-for="(item, index) in paper.judgementQuestions" :key="index">
+      <blank-item :question="item"></blank-item>
+      <Alert :type="exam.judgementQuestions[index].result ? 'success': 'error'" show-icon>
+        <span slot="desc">你的答案：{{ exam.judgementQuestions[index].answer == 0 ? '否' : '是' }}</span>
+      </Alert>
+    </div>
     <div slot="footer"></div>
   </Modal>
 </template>
@@ -36,6 +42,7 @@ import Bus from '../bus'
 import SingleItem from './paper-single-item'
 import MutipleItem from './paper-mutiple-item'
 import BlankItem from './paper-blank-item'
+import JudgementItem from './paper-judgement-item'
 
 export default {
   data () {
@@ -64,7 +71,8 @@ export default {
   components: {
     SingleItem,
     MutipleItem,
-    BlankItem
+    BlankItem,
+    JudgementItem
   }
 }
 </script>

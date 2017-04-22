@@ -120,7 +120,8 @@ export default {
         time: self.time,
         singleQuestions: [],
         mutipleQuestions: [],
-        blankQuestions: []
+        blankQuestions: [],
+        judgementQuestions: []
       };
 
       for(var i = 0; i < self.questions.length; i++) {
@@ -134,6 +135,9 @@ export default {
             break;
           case 'blank':
             paper.blankQuestions.push(question);
+            break;
+          case 'judgement':
+            paper.judgementQuestions.push(question);
             break;
           default:
             break;

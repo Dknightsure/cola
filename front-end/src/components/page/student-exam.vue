@@ -21,6 +21,7 @@
       <single-item v-for="(question, index) in paper.singleQuestions" :question="question" :key="index" class="question-item"></single-item>
       <mutiple-item v-for="(question, index) in paper.mutipleQuestions" :question="question" :key="index" class="question-item"></mutiple-item>
       <blank-item v-for="(question, index) in paper.blankQuestions" :question="question" :key="index" class="question-item"></blank-item>
+      <judgement-item v-for="(question, index) in paper.judgementQuestions" :question="question" :key="index" class="question-item"></judgement-item>
       <Button type="primary" long @click="isModalVisible = true">提交答案</Button>
     </Col>
     <Modal
@@ -38,6 +39,7 @@ import PaperIO from '../../io/PaperIO'
 import SingleItem from '../sub/exam-single-item'
 import MutipleItem from '../sub/exam-mutiple-item'
 import BlankItem from '../sub/exam-blank-item'
+import JudgementItem from '../sub/exam-judgement-item'
 import $ from 'jquery'
 import utils from '../../utils'
 import _ from 'lodash'
@@ -124,6 +126,7 @@ export default {
     SingleItem,
     MutipleItem,
     BlankItem,
+    JudgementItem,
     CountDown
   }
 }

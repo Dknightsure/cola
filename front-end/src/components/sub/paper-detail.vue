@@ -10,6 +10,7 @@
     <single-item v-for="(item, index) in paper.singleQuestions" :question="item" :key="index"></single-item>
     <mutiple-item v-for="(item, index) in paper.mutipleQuestions" :question="item" :key="index"></mutiple-item>
     <blank-item v-for="(item, index) in paper.blankQuestions" :question="item" :key="index"></blank-item>
+    <judgement-item v-for="(item, index) in paper.judgementQuestions" :question="item" :key="index"></judgement-item>
     <div slot="footer"></div>
   </Modal>
 </template>
@@ -19,6 +20,7 @@ import Bus from '../bus'
 import SingleItem from './paper-single-item'
 import MutipleItem from './paper-mutiple-item'
 import BlankItem from './paper-blank-item'
+import JudgementItem from './paper-judgement-item'
 
 export default {
   data () {
@@ -45,7 +47,8 @@ export default {
   components: {
     SingleItem,
     MutipleItem,
-    BlankItem
+    BlankItem,
+    JudgementItem
   }
 }
 </script>
