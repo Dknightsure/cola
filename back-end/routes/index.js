@@ -376,7 +376,8 @@ router.post('/api/add-paper', function (req, res, next) {
   var paper = new PaperModel({
     name: req.body.name,
     date: +new Date,
-    time: req.body.time
+    time: req.body.time,
+    makeup: req.body.makeup
   });
 
   // 添加单选

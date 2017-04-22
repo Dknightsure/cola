@@ -74,6 +74,10 @@ export default {
           }
         }
 
+        for (let i = 0; i < paper.judgementQuestions.length; i++){
+          paper.judgementQuestions[i].answer = 0;
+        }
+
         this.paper = paper
       }
     }
