@@ -141,6 +141,12 @@ router.get('/api/query-blank-question', function (req, res, next) {
   });
 })
 
+router.get('/api/query-judgement-question', function (req, res, next) {
+  JudgementQuestionModel.find({}, function (err, data) {
+    res.json(data);
+  })
+})
+
 router.post('/api/alter-single-question', function (req, res, next) {
   SingleQuestionModel.findById(req.body._id, function (err, question) {
     if (err) {
@@ -190,6 +196,26 @@ router.post('/api/alter-blank-question', function (req, res, next) {
     } else {
       question.title = req.body.title;
       question.selections = req.body.selections;
+      question.difficulty = req.body.difficulty;
+
+      question.save(function (err) {
+        if (err) {
+          console.log(err);
+          res.json('fail');
+        }
+        res.json('success');
+      })
+    }
+  })
+})
+
+router.post('/api/alter-judgement-question', function (req, res, next) {
+  JudgementQuestionModel.findById(req.body._id, function (err, question) {
+    if (err) {
+      console.log(err)
+    } else {
+      question.title = req.body.title;
+      question.answer = req.body.answer;
       question.difficulty = req.body.difficulty;
 
       question.save(function (err) {
@@ -312,6 +338,18 @@ router.post('/api/remove-blank-question', function (req, res, next) {
     }
   })
 });
+
+router.post('/api/remove-judgement-question', function (req, res, next) {
+  var id = ObjectId(req.body.id);
+  JudgementQuestionModel.remove({ _id: id }, function (err) {
+    if (err) {
+      console.log(err);
+      res.json('fail');
+    } else {
+      res.json('success');
+    }
+  })
+})
 
 router.post('/api/remove-paper', function (req, res, next) {
   var id = ObjectId(req.body.id);

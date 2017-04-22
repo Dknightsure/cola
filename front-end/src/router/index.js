@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import SingleList from '@/components/page/single-list'
 import MutipleList from '@/components/page/mutiple-list'
 import BlankList from '@/components/page/blank-list'
+import JudgementList from '@/components/page/judgement-list'
 import AddSignle from '@/components/page/add-single'
 import AddMutiple from '@/components/page/add-mutiple'
 import AddBlank from '@/components/page/add-blank'
@@ -32,6 +33,10 @@ export default new Router({
     path: '/blank',
     name: NAME.BLANK_LIST,
     component: BlankList
+  }, {
+    path: '/judgement',
+    name: NAME.JUDGEMENT_LIST,
+    component: JudgementList
   }, {
     path: '/add/single',
     name: NAME.ADD_SINGLE,

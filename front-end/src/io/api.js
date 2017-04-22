@@ -38,6 +38,11 @@ export default {
     method: 'GET'
   },
 
+  getJudgementList: {
+    url: '/api/query-judgement-question',
+    method: 'GET'
+  },
+
   addPaper: {
     url: '/api/add-paper',
     method: 'POST'
@@ -68,6 +73,11 @@ export default {
     method: 'POST'
   },
 
+  alterJudgement: {
+    url: '/api/alter-judgement-question',
+    method: 'POST'
+  },
+
   deleteSingle: {
     url: '/api/remove-single-question',
     method: 'POST'
@@ -80,6 +90,11 @@ export default {
 
   deleteBlank: {
     url: '/api/remove-blank-question',
+    method: 'POST'
+  },
+
+  deleteJudgement: {
+    url: '/api/remove-judgement-question',
     method: 'POST'
   },
 
