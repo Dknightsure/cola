@@ -36,6 +36,7 @@ import BlankItem from '../sub/exam-blank-item'
 import $ from 'jquery'
 import utils from '../../utils'
 import _ from 'lodash'
+import NAME from '../../router/name'
 
 export default {
   data () {
@@ -99,7 +100,10 @@ export default {
       const self = this;
       new PaperIO().addPractice(this.paper).then(res => {
         self.$Message.success('提交成功！')
-      }).catch(err => {
+        self.$router.push({
+          name: NAME.STUDENT_PRACTICE_LIST
+        })
+      }, err => {
         self.$Message.error('提交失败！')
       })
     },
