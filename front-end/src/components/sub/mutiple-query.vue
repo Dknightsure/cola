@@ -90,7 +90,7 @@ export default {
 
   methods: {
     addQuestionToPaper () {
-      Bus.$emit('addQuestionToPaper', this.question)
+      Bus.$emit('addQuestionToPaper', utils.clone(this.question))
     },
 
     alter () {

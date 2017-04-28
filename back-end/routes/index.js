@@ -29,12 +29,30 @@ var SingleQuestionSchema = new mongoose.Schema({
   type: { type: String }
 });
 
+var PaperSingleQuestionSchema = new mongoose.Schema({
+  title: { type: String },
+  selections: [SelectionSchema],
+  answer: { type: Number },
+  difficulty: { type: Number },
+  type: { type: String },
+  score: { type: Number }
+});
+
 var MutipleQuestionSchema = new mongoose.Schema({
   title: { type: String },
   selections: [SelectionSchema],
   answer: { type: Array },
   difficulty: { type: Number },
   type: { type: String }
+});
+
+var PaperMutipleQuestionSchema = new mongoose.Schema({
+  title: { type: String },
+  selections: [SelectionSchema],
+  answer: { type: Array },
+  difficulty: { type: Number },
+  type: { type: String },
+  score: { type: Number }
 });
 
 var BlankQuestionSchema = new mongoose.Schema({
@@ -44,6 +62,14 @@ var BlankQuestionSchema = new mongoose.Schema({
   type: { type: String }
 });
 
+var PaperBlankQuestionSchema = new mongoose.Schema({
+  title: { type: String },
+  selections: [SelectionSchema],
+  difficulty: { type: Number },
+  type: { type: String },
+  score: { type: Number }
+});
+
 var JudgementQuestionSchema = new mongoose.Schema({
   title: { type: String },
   difficulty: { type: Number },
@@ -51,13 +77,17 @@ var JudgementQuestionSchema = new mongoose.Schema({
   type: { type: String }
 })
 
+var PaperJudgementQuestionSchema = new mongoose.Schema({
+  title: { type: String },
+  difficulty: { type: Number },
+  answer: { type: Number },
+  type: { type: String },
+  score: { type: Number }
+})
+
 var PaperSchema = new mongoose.Schema({
   name: { type: String },
   date: { type: Number },
-  type: {
-    type: String,
-    default: 'exam'
-  },
   time: {
     type: Number,
     default: 30
@@ -66,11 +96,20 @@ var PaperSchema = new mongoose.Schema({
     type: Number,
     default: 1
   },
+  singleQuestions: [PaperSingleQuestionSchema],
+  mutipleQuestions: [PaperMutipleQuestionSchema],
+  blankQuestions: [PaperBlankQuestionSchema],
+  judgementQuestions: [PaperJudgementQuestionSchema]
+});
+
+var PracticePaperModel = new mongoose.Schema({
+  name: { type: String },
+  date: { type: Number },
   singleQuestions: [SingleQuestionSchema],
   mutipleQuestions: [MutipleQuestionSchema],
   blankQuestions: [BlankQuestionSchema],
   judgementQuestions: [JudgementQuestionSchema]
-});
+})
 
 var ExamSingleAnswer = new mongoose.Schema({
   questionId: { type: String },
@@ -123,6 +162,7 @@ var MutipleQuestionModel = db.model('MutipleQuestions', MutipleQuestionSchema);
 var BlankQuestionModel = db.model('BlankQuestions', BlankQuestionSchema);
 var JudgementQuestionModel = db.model('JudgementQuestions', JudgementQuestionSchema);
 var PaperModel = db.model('Papers', PaperSchema);
+var PracticePaperModel = db.model('PracticePapers', PracticePaperModel);
 var ExamModel = db.model('Exams', ExamSchema);
 var PracticeModel = db.model('Practices', PracticeSchema);
 
@@ -372,12 +412,90 @@ router.post('/api/remove-paper', function (req, res, next) {
   })
 })
 
+router.post('/api/remove-practice-paper', function (req, res, next) {
+  var id = ObjectId(req.body.id);
+  PracticePaperModel.remove({ _id: id }, function (err) {
+    if (err) {
+      console.log(err);
+      res.json('fail');
+    } else {
+      res.json('success');
+    }
+  })
+})
+
 router.post('/api/add-paper', function (req, res, next) {
   var paper = new PaperModel({
     name: req.body.name,
     date: +new Date,
     time: req.body.time,
     makeup: req.body.makeup
+  });
+
+  // 添加单选
+  for (var i = 0; i < req.body.singleQuestions.length; i++) {
+    var q = req.body.singleQuestions[i];
+    var question = {
+      title: q.title,
+      selections: q.selections,
+      answer: q.answer,
+      difficulty: q.difficulty,
+      score: q.score
+    }
+    paper.singleQuestions.push(question);
+  }
+
+  // 添加多选
+  for (var j = 0; j < req.body.mutipleQuestions.length; j++) {
+    var q = req.body.mutipleQuestions[j];
+    var question = {
+      title: q.title,
+      selections: q.selections,
+      answer: q.answer,
+      difficulty: q.difficulty,
+      score: q.score
+    }
+    paper.mutipleQuestions.push(question);
+  }
+
+  // 添加填空
+  for (var k = 0; k < req.body.blankQuestions.length; k++) {
+    var q = req.body.blankQuestions[k];
+    var question = {
+      title: q.title,
+      selections: q.selections,
+      difficulty: q.difficulty,
+      score: q.score
+    }
+    paper.blankQuestions.push(question);
+  }
+
+  // 添加判断题
+  for (var n = 0; n < req.body.judgementQuestions.length; n++) {
+    var q = req.body.judgementQuestions[n];
+    var question = {
+      title: q.title,
+      answer: q.answer,
+      difficulty: q.difficulty,
+      score: q.score
+    }
+    paper.judgementQuestions.push(question)
+  }
+
+  paper.save(function (err, ques) {
+    if (err) {
+      console.log(err);
+      res.json('fail');
+    } else {
+      res.json('success');
+    }
+  });
+})
+
+router.post('/api/add-practice-paper', function (req, res, next) {
+  var paper = new PracticePaperModel({
+    name: req.body.name,
+    date: +new Date
   });
 
   // 添加单选
@@ -442,8 +560,24 @@ router.get('/api/get-papers', function (req, res, next) {
   })
 });
 
+router.get('/api/get-practice-papers', function (req, res, next) {
+  PracticePaperModel.find({}, function (err, data) {
+    res.json(data);
+  })
+});
+
 router.post('/api/get-paper-detail/', function (req, res, next) {
   PaperModel.findById(req.body.id, function (err, paper) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(paper);
+    }
+  })
+})
+
+router.post('/api/get-practice-paper-detail/', function (req, res, next) {
+  PracticePaperModel.findById(req.body.id, function (err, paper) {
     if (err) {
       console.log(err);
     } else {
@@ -570,15 +704,15 @@ router.post('/api/add-practice-answer', function (req, res, next) {
 })
 
 router.post('/api/get-exams', function (req, res, next) {
-  PaperModel.find({ "type": "exam" }, function (err, data) {
+  PaperModel.find({}).lean().exec(function (err, data) {
     if (!err) {
       var queryExam = [];
       data.forEach(function (paper) {
         var makeup = paper.makeup;
+        var type = '补考';
         queryExam.push(new Promise((resolve, reject) => {
           ExamModel.find({ "paperId": paper._id, "user": USER }, function (err, exams) {
             // exams.length <= makeup 是还有补考次数
-            var type = '补考';
             if (exams.length <= makeup) {
               if (exams.length == 0) {
                 type = '普通考试'
@@ -609,6 +743,7 @@ router.post('/api/get-exams', function (req, res, next) {
       Promise.all(queryExam).then(function (data) {
         data.forEach(function (paper) {
           if (paper != null) {
+            console.log(paper)
             result.push(paper)
           }
         })
@@ -715,28 +850,8 @@ router.post('/api/get-practice-result', function (req, res, next) {
   })
 })
 
-router.post('/api/changeToPractice', function (req, res, next) {
-  var id = req.body.id;
-  PaperModel.findById(id, function (err, paper) {
-    if (!err) {
-      if (paper.type === 'practice') {
-        res.json('changed')
-        return;
-      }
-      paper.type = 'practice';
-      paper.save(function (err) {
-        if (!err) {
-          res.json('sucess')
-        } else {
-          res.json('fail')
-        }
-      })
-    }
-  })
-})
-
 router.post('/api/get-practice-list', function (req, res, next) {
-  PaperModel.find({ "type": "practice" }, function (err, data) {
+  PracticePaperModel.find({}, function (err, data) {
     if (!err) {
       res.json(data)
     } else {

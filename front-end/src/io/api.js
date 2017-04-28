@@ -48,13 +48,28 @@ export default {
     method: 'POST'
   },
 
+  addPracticePaper: {
+    url: '/api/add-practice-paper',
+    method: 'POST'
+  },
+
   getPaperList: {
     url: '/api/get-papers',
     method: 'GET'
   },
 
+  getPracticePaperList: {
+    url: '/api/get-practice-papers',
+    method: 'GET'
+  },
+
   getPaperDetail: {
     url: '/api/get-paper-detail',
+    method: 'POST'
+  },
+
+  getPracticePaperDetail: {
+    url: '/api/get-practice-paper-detail',
     method: 'POST'
   },
 
@@ -100,6 +115,11 @@ export default {
 
   deletePaper: {
     url: '/api/remove-paper',
+    method: 'POST'
+  },
+
+  deletePracticePaper: {
+    url: '/api/remove-practice-paper',
     method: 'POST'
   },
 

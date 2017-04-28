@@ -14,8 +14,28 @@ PaperIO.prototype.addPaper = function (data) {
   })
 }
 
+PaperIO.prototype.addPracticePaper = function (data) {
+  let obj = this.api.addPracticePaper;
+
+  return this.axios({
+    method: obj.method,
+    url: obj.url,
+    data: data
+  })
+}
+
 PaperIO.prototype.getList = function (params) {
   let obj = this.api.getPaperList;
+
+  return this.axios({
+    method: obj.method,
+    url: obj.url,
+    params: params
+  })
+}
+
+PaperIO.prototype.getPracticePaperList = function (params) {
+  let obj = this.api.getPracticePaperList;
 
   return this.axios({
     method: obj.method,
@@ -34,8 +54,28 @@ PaperIO.prototype.getDetail = function (data) {
   })
 }
 
+PaperIO.prototype.getPracticePaperDetail = function (data) {
+  let obj = this.api.getPracticePaperDetail;
+
+  return this.axios({
+    method: obj.method,
+    url: obj.url,
+    data: data
+  })
+}
+
 PaperIO.prototype.delete = function (data) {
   let obj = this.api.deletePaper;
+
+  return this.axios({
+    method: obj.method,
+    url: obj.url,
+    data: data
+  })
+}
+
+PaperIO.prototype.deletePracticePaper = function (data) {
+  let obj = this.api.deletePracticePaper;
 
   return this.axios({
     method: obj.method,

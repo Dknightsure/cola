@@ -51,7 +51,7 @@
     <div class="layout">
         <Row type="flex">
             <i-col span="5" class="layout-menu-left">
-              <left-nav activeName="paper-list" :openName="['paper']"></left-nav>
+              <left-nav activeName="practice-paper-list" :openName="['paper']"></left-nav>
             </i-col>
             <i-col span="19">
                 <div class="layout-header">
@@ -60,7 +60,7 @@
                 <div class="layout-breadcrumb">
                     <Breadcrumb>
                         <Breadcrumb-item href="#">首页</Breadcrumb-item>
-                        <Breadcrumb-item>考试卷</Breadcrumb-item>
+                        <Breadcrumb-item>练习卷</Breadcrumb-item>
                     </Breadcrumb>
                 </div>
                 <div class="layout-content">
@@ -133,7 +133,7 @@ export default {
     fetchData () {
       const self = this;
       self.data = []
-      new PaperIO().getList().then(res => {
+      new PaperIO().getPracticePaperList().then(res => {
         let paperList = res.data;
         for(let i = 0; i < paperList.length; i++){
           let paper = {};
@@ -149,7 +149,7 @@ export default {
 
     showDetail (index) {
       const id = this.data[index]._id;
-      new PaperIO().getDetail({id}).then(res => {
+      new PaperIO().getPracticePaperDetail({id}).then(res => {
         console.log(res.data)
         Bus.$emit('showPaperDetail', res.data);
       }).catch(err => {
@@ -170,7 +170,7 @@ export default {
       const self = this;
       const index = this.removeIndex;
       const id = this.data[index]._id;
-      new PaperIO().delete({id}).then(res => {
+      new PaperIO().deletePracticePaper({id}).then(res => {
         self.$Message.success('删除成功！');
         self.close();
         self.fetchData();

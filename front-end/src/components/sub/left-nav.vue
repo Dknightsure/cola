@@ -31,7 +31,8 @@ h1 {
                 <Icon type="ios-keypad"></Icon>
                 试卷管理
             </template>
-            <Menu-item name="paper-list">我的试卷</Menu-item>
+            <Menu-item name="paper-list">考试卷</Menu-item>
+            <Menu-item name="practice-paper-list">练习卷</Menu-item>
         </Submenu>
         <Submenu name="add">
             <template slot="title">
@@ -97,6 +98,12 @@ export default {
           this.$router.push({
             name: NAME.PAPER_LIST
           })
+          break;
+        case 'practice-paper-list':
+          this.$router.push({
+            name: NAME.PRACTICE_PAPER_LIST
+          })
+          break;
         default:
 
       }

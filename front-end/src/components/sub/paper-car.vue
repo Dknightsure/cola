@@ -32,54 +32,73 @@
       }
     }
   }
+}
 
-  ul {
-    width: 100%;
+ul {
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid #5cadff;
+
+  li {
+    font-size: 18px;
+    padding: 0 20px;
+    border-bottom: 1px dotted #657180;
+    position: relative;
+    white-space: nowrap;
     overflow: hidden;
-    border: 1px solid #5cadff;
-    display: none;
+    text-overflow: ellipsis;
+  }
 
-    li {
-      font-size: 18px;
-      padding: 0 20px;
-      border-bottom: 1px dotted #657180;
-      position: relative;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
+  li:hover {
     .icon-delete {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      display: none;
-      cursor: pointer;
-    }
-
-    li:hover {
-      .icon-delete {
-        display: inline-block;
-      }
+      display: inline-block;
     }
   }
 }
+
+.icon-delete {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: none;
+  cursor: pointer;
+}
+
+.score {
+  width: 40px;
+}
+
+.paper-input {
+  margin: 10px 0 0 0;
+}
+
 </style>
 <template>
   <div class="container-paper-car">
-    <Input v-model="name" placeholder="试卷标题..." style="width: 300px"></Input>
-    <Input v-model.number="time" placeholder="考试时间" style="width: 300px"></Input>
-    <Input v-model.number="makeup" placeholder="补考次数" style="width: 300px"></Input>
-    <ul>
-      <li v-for="(question, index) in questions">
-        {{ question.title }}
-        <div @click="deleteQuestion(index)">
-          <Icon type="trash-a" color="#ff0000" size="20" class="icon-delete"></Icon>
-        </div>
-      </li>
-    </ul>
-    <h1>试卷试题数：{{ questions.length }}<Button type="primary" class="submit-paper" @click="submitPaper">发布试卷</Button></h1>
+    <h1 @click="isPaperVisible = true">试卷试题数：{{ questions.length }}</h1>
+    <Modal
+        v-model="isPaperVisible"
+        title="试卷详情"
+        @on-ok="submitPaper">
+        请选择试卷类型：
+        <Select v-model="type" style="width:200px">
+          <Option value="exam">考试卷</Option>
+          <Option value="practice">练习卷</Option>
+        </Select>
+        <Input v-model="name" placeholder="试卷标题..." class="paper-input"></Input>
+        <Input v-model.number="time" placeholder="考试时间" :disabled="type == 'practice'" class="paper-input"></Input>
+        <Input v-model.number="makeup" placeholder="补考次数" :disabled="type == 'practice'" class="paper-input"></Input>
+        <ul>
+          <li v-for="(question, index) in questions" :key="index">
+            分数：<Input class="score" v-model.number="question.score" :disabled="type == 'practice'"></Input>
+            题目：{{ question.title }}
+            <div @click="deleteQuestion(index)">
+              <Icon type="trash-a" color="#ff0000" size="20" class="icon-delete"></Icon>
+            </div>
+          </li>
+        </ul>
+    </Modal>
   </div>
 </template>
 
@@ -90,7 +109,9 @@ import PaperIO from '../../io/PaperIO'
 export default {
   data () {
     return {
+      isPaperVisible: false,
       name: '',
+      type: 'exam',
       time: null,
       makeup: null,
       questions: []
@@ -105,6 +126,7 @@ export default {
     listenAddQuestion () {
       const self = this;
       Bus.$on('addQuestionToPaper', (question) => {
+        question.score = 10;
         self.questions.push(question);
         self.$Message.success('添加到试卷成功！')
       })
@@ -147,12 +169,27 @@ export default {
         }
       }
 
-      new PaperIO().addPaper(paper).then(res => {
-        Bus.$emit('reload-paper-list');
-        self.$Message.success('发布试卷成功！')
-      }, err => {
-        self.$Message.error('发布试卷失败！')
-      })
+      if(self.type == 'exam'){
+        console.log('exam')
+        console.log(paper)
+        new PaperIO().addPaper(paper).then(res => {
+          Bus.$emit('reload-paper-list');
+          self.$Message.success('发布考试卷成功！')
+        }, err => {
+          self.$Message.error('发布考试卷失败！')
+        })
+      }else if(self.type == 'practice'){
+        console.log('practice')
+        console.log(paper)
+        new PaperIO().addPracticePaper(paper).then(res => {
+          Bus.$emit('reload-paper-list');
+          self.$Message.success('发布练习卷成功！')
+        }, err => {
+          self.$Message.error('发布练习卷失败！')
+        })
+      }
+
+      
     }
   }
 }
