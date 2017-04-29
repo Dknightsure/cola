@@ -97,6 +97,11 @@ export default {
       removeIndex: 0,
       head: [
         {
+            type: 'index',
+            width: 60,
+            align: 'center'
+        },
+        {
             title: '试卷名称',
             key: 'name',
             render (row, column, index) {
@@ -105,7 +110,8 @@ export default {
         },
         {
             title: '创建时间',
-            key: 'date'
+            key: 'date',
+            sortable: true
         },
         {
             title: '操作',

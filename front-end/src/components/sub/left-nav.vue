@@ -25,6 +25,7 @@ h1 {
             <Menu-item name="q-mutiple-list">多选题</Menu-item>
             <Menu-item name="q-blank-list">填空题</Menu-item>
             <Menu-item name="q-judgement-list">判断题</Menu-item>
+            <Menu-item name="search-question">搜索试题</Menu-item>
         </Submenu>
         <Submenu name="paper">
             <template slot="title">
@@ -72,6 +73,11 @@ export default {
         case 'q-judgement-list':
           this.$router.push({
             name: NAME.JUDGEMENT_LIST
+          })
+          break;
+        case 'search-question':
+          this.$router.push({
+            name: NAME.SEARCH_QUESTION
           })
           break;
         case 'add-single':

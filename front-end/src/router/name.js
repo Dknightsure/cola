@@ -16,5 +16,6 @@ export default {
   STUDENT_EXAM: 'student-exam',
   EXAM_RECORD: 'exam-record',
   PRACTICE_RECORD: 'practice-record',
-  STUDENT_PRACTICE: 'student-practice'
+  STUDENT_PRACTICE: 'student-practice',
+  SEARCH_QUESTION: 'search-question'
 }

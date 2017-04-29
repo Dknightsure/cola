@@ -166,5 +166,10 @@ export default {
   getPracticeResult: {
     url: '/api/get-practice-result',
     method: 'POST'
+  },
+
+  search: {
+    url: '/api/search',
+    method: 'POST'
   }
 }

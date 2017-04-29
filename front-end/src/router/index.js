@@ -16,6 +16,7 @@ import ExamRecord from '@/components/page/student-exam-record'
 import PracticeRecord from '@/components/page/student-practice-record'
 import StudentPractice from '@/components/page/student-practice'
 import PracticePaperList from '@/components/page/practice-paper-list'
+import SearchQuestion from '@/components/page/search-question'
 
 import NAME from './name'
 
@@ -38,6 +39,10 @@ export default new Router({
     path: '/judgement',
     name: NAME.JUDGEMENT_LIST,
     component: JudgementList
+  }, {
+    path: '/search',
+    name: NAME.SEARCH_QUESTION,
+    component: SearchQuestion
   }, {
     path: '/add/single',
     name: NAME.ADD_SINGLE,

@@ -2,8 +2,8 @@
 .container-paper-car {
   position: fixed;
   width: 300px;
-  left: 25%;
-  bottom: 20px;
+  top: 10px;
+  right: 10px;
   z-index: 100;
 
   &:hover {

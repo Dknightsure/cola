@@ -899,6 +899,62 @@ router.post('/api/get-practice-record', function (req, res, next) {
   })
 })
 
+router.post('/api/search', function (req, res, next) {
+  var searchValue = req.body.searchValue;
+  var reg = new RegExp(searchValue);
+
+  var querySingle = new Promise(function (resolve, reject) {
+    SingleQuestionModel.find({ 'title': reg }, function (err, data) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(data)
+      }
+    })
+  })
+
+  var queryMutiple = new Promise(function (resolve, reject) {
+    MutipleQuestionModel.find({ 'title': reg }, function (err, data) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(data)
+      }
+    })
+  })
+
+  var queryBlank = new Promise(function (resolve, reject) {
+    BlankQuestionModel.find({ 'title': reg }, function (err, data) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(data)
+      }
+    })
+  })
+
+  var queryJudgement = new Promise(function (resolve, reject) {
+    JudgementQuestionModel.find({ 'title': reg }, function (err, data) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(data)
+      }
+    })
+  })
+
+  Promise.all([querySingle, queryMutiple, queryBlank, queryJudgement]).then(values => {
+    var searchResult = {};
+    searchResult.singleQuestions = values[0];
+    searchResult.mutipleQuestions = values[1];
+    searchResult.blankQuestions = values[2];
+    searchResult.judgementQuestions = values[3]
+    res.json(searchResult);
+  }).catch(err => {
+    console.log(err);
+  })
+
+})
 
 
 module.exports = router;
