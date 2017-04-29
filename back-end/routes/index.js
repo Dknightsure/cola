@@ -114,25 +114,29 @@ var PracticePaperModel = new mongoose.Schema({
 var ExamSingleAnswer = new mongoose.Schema({
   questionId: { type: String },
   answer: { type: Number },
-  result: { type: Boolean }
+  result: { type: Boolean },
+  score: { type: Number }
 })
 
 var ExamMutipleAnswer = new mongoose.Schema({
   questionId: { type: String },
   answer: { type: Array },
-  result: { type: Boolean }
+  result: { type: Boolean },
+  score: { type: Number }
 })
 
 var ExamBlankAnswer = new mongoose.Schema({
   questionId: { type: String },
   selections: [SelectionSchema],
-  result: { type: Boolean }
+  result: { type: Boolean },
+  score: { type: Number }
 })
 
 var ExamJudgementAnswer = new mongoose.Schema({
   questionId: { type: String },
   answer: { type: Number },
-  result: { type: Boolean }
+  result: { type: Boolean },
+  score: { type: Number }
 })
 
 var ExamSchema = new mongoose.Schema({
@@ -141,6 +145,8 @@ var ExamSchema = new mongoose.Schema({
   makeup: { type: Number, default: 0 },
   date: { type: Number },
   result: { type: Boolean },
+  score: { type: Number },
+  sum: { type: Number },
   singleQuestions: [ExamSingleAnswer],
   mutipleQuestions: [ExamMutipleAnswer],
   blankQuestions: [ExamBlankAnswer],
@@ -622,47 +628,55 @@ router.post('/api/add-exam-answer', function (req, res, next) {
     exam.mutipleQuestions = req.body.mutipleQuestions;
     exam.blankQuestions = req.body.blankQuestions;
     exam.judgementQuestions = req.body.judgementQuestions;
-    var questionNum = exam.singleQuestions.length + exam.mutipleQuestions.length + exam.blankQuestions.length + exam.judgementQuestions.length;
+    var paperScore = 0;
+    var examScore = 0;
 
     PaperModel.findById(paperId, function (err, paper) {
       var rightQuestionNum = 0;
       for (let i = 0; i < exam.singleQuestions.length; i++) {
+        paperScore += exam.singleQuestions[i].score;
         if (exam.singleQuestions[i].answer == paper.singleQuestions[i].answer) {
           exam.singleQuestions[i].result = true;
-          rightQuestionNum++;
+          examScore += exam.singleQuestions[i].score;
         } else {
           exam.singleQuestions[i].result = false;
         }
       }
 
       for (let i = 0; i < exam.mutipleQuestions.length; i++) {
+        paperScore += exam.mutipleQuestions[i].score;
         if (JSON.stringify(exam.mutipleQuestions[i].answer) == JSON.stringify(paper.mutipleQuestions[i].answer)) {
           exam.mutipleQuestions[i].result = true;
-          rightQuestionNum++;
+          examScore += exam.mutipleQuestions[i].score;
         } else {
           exam.mutipleQuestions[i].result = false;
         }
       }
 
       for (let i = 0; i < exam.blankQuestions.length; i++) {
+        paperScore += exam.blankQuestions[i].score;
         if (JSON.stringify(exam.blankQuestions[i].selections) == JSON.stringify(paper.blankQuestions[i].selections)) {
           exam.blankQuestions[i].result = true;
-          rightQuestionNum++;
+          examScore += exam.blankQuestions[i].score;
         } else {
           exam.blankQuestions[i].result = false;
         }
       }
 
       for (let i = 0; i < exam.judgementQuestions.length; i++) {
+        paperScore += exam.judgementQuestions[i].score;
         if (exam.judgementQuestions[i].answer == paper.judgementQuestions[i].answer) {
           exam.judgementQuestions[i].result = true;
-          rightQuestionNum++;
+          examScore += exam.judgementQuestions[i].score
         } else {
           exam.judgementQuestions[i].result = false;
         }
       }
 
-      if (rightQuestionNum >= Math.ceil(questionNum / 2)) {
+      exam.score = examScore;
+      exam.sum = paperScore;
+
+      if (examScore / paperScore >= 0.6) {
         exam.result = true;
       } else {
         exam.result = false;
@@ -743,7 +757,6 @@ router.post('/api/get-exams', function (req, res, next) {
       Promise.all(queryExam).then(function (data) {
         data.forEach(function (paper) {
           if (paper != null) {
-            console.log(paper)
             result.push(paper)
           }
         })
@@ -821,7 +834,7 @@ router.post('/api/get-practice-result', function (req, res, next) {
   var practiceId = req.body.practiceId;
 
   var queryPaper = new Promise((resolve, reject) => {
-    PaperModel.findById(paperId).lean().exec(function (err, paper) {
+    PracticePaperModel.findById(paperId).lean().exec(function (err, paper) {
       if (!err) {
         resolve(paper)
       } else {
@@ -867,7 +880,7 @@ router.post('/api/get-practice-record', function (req, res, next) {
       var allQuery = []
       practices.forEach(function (practice) {
         allQuery.push(new Promise((resolve, reject) => {
-          PaperModel.findById(practice.paperId, function (err, paper) {
+          PracticePaperModel.findById(practice.paperId, function (err, paper) {
             practice.name = paper.name
             resolve(practice)
           })

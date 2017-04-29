@@ -43,6 +43,10 @@ export default {
             key: 'makeup'
         },
         {
+            title: '考试分数',
+            key: 'score'
+        },
+        {
             title: '最终结果',
             key: 'result'
         },
@@ -77,6 +81,7 @@ export default {
           tmp.date = moment(exam.date).local().format("dddd, MMMM Do YYYY, h:mm:ss a");
           tmp.paperId = exam.paperId;
           tmp.makeup = exam.makeup == 0 ? '普通考试': '第 ' + exam.makeup + ' 次补考';
+          tmp.score = exam.score + '/' + exam.sum;
           tmp.result = exam.result ? '合格' : '不合格';
           tmp.examId = exam._id
           self.data.push(tmp);

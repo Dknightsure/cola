@@ -90,7 +90,7 @@ export default {
     fetchData () {
       const self = this;
       const id = this.paperId
-      new PaperIO().getDetail({id}).then(res => {
+      new PaperIO().getPracticePaperDetail({id}).then(res => {
         self.originalPaper = res.data;
       }).catch(err => {
         this.$Message.error('获取试卷详情失败！')
