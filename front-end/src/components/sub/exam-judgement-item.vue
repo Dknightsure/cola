@@ -13,6 +13,9 @@
           <Form-item label="题目难度">
               <Rate allow-half disabled v-model="question.difficulty"></Rate>
           </Form-item>
+          <Form-item label="题目分数" v-if="question.score">
+              {{ question.score }}
+          </Form-item>
           <Form-item label="正确答案">
             <Radio-group v-model="question.answer" >
                 <Radio :label="0">否</Radio>

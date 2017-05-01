@@ -13,6 +13,9 @@
           <Form-item label="题目难度">
               <Rate allow-half disabled v-model="question.difficulty"></Rate>
           </Form-item>
+          <Form-item label="题目分数" v-if="question.score">
+              {{ question.score }}
+          </Form-item>
           <Form-item
             :label="index | indexToSelection('填空')"
             v-for="(item, index) in question.selections"

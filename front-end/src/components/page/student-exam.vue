@@ -90,6 +90,27 @@ export default {
     this.paperId = this.$route.params.paperId
     this.fetchData()
     this.paperCarHide();
+
+    const self = this;
+
+    window.onunload = function(e) {
+      self.autoSubmit();
+    }
+
+    window.onbeforeunload = function (e) {
+      return '时间未到，还是要提交吗？';
+    }
+  },
+
+  beforeRouteLeave (to, from, next) {
+    if(confirm('现在离开会自动提交结果哦！') == true){
+      console.log('leave')
+      this.ok();
+      next();
+    }else {
+      console.log('dont leave')
+      next(false);
+    }
   },
 
   methods: {
@@ -107,7 +128,7 @@ export default {
       $('.container-paper-car').hide()
     },
 
-    ok () {
+    ok (callback) {
       console.log(this.paper);
       const self = this;
       new PaperIO().addExam(this.paper).then(res => {
@@ -115,8 +136,22 @@ export default {
         self.$router.push({
           name: NAME.STUDENT_EXAM_LIST
         })
+        callback && callback();
       }, err => {
         self.$Message.error('提交失败！')
+        callback && callback();
+      })
+    },
+
+    autoSubmit (callback) {
+      console.log(this.paper);
+      const self = this;
+      new PaperIO().addExam(this.paper).then(res => {
+        self.$Message.success('提交成功！')
+        callback && callback();
+      }, err => {
+        self.$Message.error('提交失败！')
+        callback && callback();
       })
     },
 

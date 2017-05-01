@@ -20,6 +20,9 @@
           <Form-item label="题目难度">
               <Rate allow-half disabled v-model="question.difficulty"></Rate>
           </Form-item>
+          <Form-item label="题目分数" v-if="question.score">
+              {{ question.score }}
+          </Form-item>
           <Form-item label="请选择">
               <Radio-group v-model="question.answer">
                 <Radio v-for="(item, index) in question.selections" :label="index" :key="index">{{ item.title }}</Radio>
