@@ -8,11 +8,13 @@
     <Col span="12" offset="6">
       <student-nav activeName="analysis"></student-nav>
       <canvas ref="lineChart"></canvas>
+      <four-pie :pie="pie"></four-pie>
     </Col>
   </Row>
 </template>
 <script>
 import StudentNav from '../sub/student-nav'
+import FourPie from '../sub/four-pie'
 import NAME from '../../router/name'
 import $ from 'jquery'
 import PaperIO from '../../io/PaperIO'
@@ -22,7 +24,9 @@ import Chart from 'chart.js'
 export default {
   data () {
     return {
-      exams: null
+      exams: null,
+      pies: [],
+      pie: null
     }
   },
 
@@ -48,11 +52,55 @@ export default {
       const self = this;
 
       const labels = [];
-      const scoreData = []
+      const scoreData = [];
       self.exams.forEach((exam) => {
+        const tmp = {
+          single: 0,
+          mutiple: 0,
+          blank: 0,
+          judgement: 0,
+          lost: 0,
+        }
+
         labels.push(exam.name);
         scoreData.push(exam.score);
+
+        exam.singleQuestions.forEach(question => {
+          if(question.result === true){
+            tmp.single += question.score
+          }else{
+            tmp.lost += question.score
+          }
+        })
+
+        exam.mutipleQuestions.forEach(question => {
+          if(question.result === true){
+            tmp.mutiple += question.score
+          }else{
+            tmp.lost += question.score
+          }
+        })
+
+        exam.blankQuestions.forEach(question => {
+          if(question.result === true){
+            tmp.blank += question.score
+          }else{
+            tmp.lost += question.score
+          }
+        })
+
+        exam.judgementQuestions.forEach(question => {
+          if(question.result === true){
+            tmp.judgement += question.score
+          }else{
+            tmp.lost += question.score
+          }
+        })
+
+        self.pies.push(tmp);
       })
+
+      console.log(self.pies);
 
       var data = {
           labels: labels,
@@ -83,8 +131,20 @@ export default {
       };
 
       let lineChart = new Chart.Line(self.$refs.lineChart, {
-        data: data
+        data: data,
+        options: {
+          responsive: true
+        }
       })
+
+      self.$refs.lineChart.onclick = function(evt){
+        var activePoint = lineChart.getElementsAtEvent(evt)[0];
+        if(typeof activePoint !== 'undefined'){
+          self.pie = self.pies[activePoint._index]
+        }else{
+          return
+        }
+      }
     },
 
     paperCarHide () {
@@ -93,7 +153,8 @@ export default {
   },
   
   components: {
-    StudentNav
+    StudentNav,
+    FourPie
   }
 }
 </script>
