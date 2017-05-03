@@ -17,6 +17,7 @@ import PracticeRecord from '@/components/page/student-practice-record'
 import StudentPractice from '@/components/page/student-practice'
 import PracticePaperList from '@/components/page/practice-paper-list'
 import SearchQuestion from '@/components/page/search-question'
+import Analysis from '@/components/page/analysis'
 
 import NAME from './name'
 
@@ -91,5 +92,9 @@ export default new Router({
     path: '/practice-paper-list',
     name: NAME.PRACTICE_PAPER_LIST,
     component: PracticePaperList
+  }, {
+    path: '/analysis',
+    name: NAME.ANALYSIS,
+    component: Analysis
   }]
 })

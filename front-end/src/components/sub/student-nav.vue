@@ -20,6 +20,10 @@
           <Icon type="ios-list-outline"></Icon>
           我的练习记录
       </Menu-item>
+      <Menu-item name="analysis">
+          <Icon type="ios-pie-outline"></Icon>
+          往期考试分析
+      </Menu-item>
     </Menu>
   </Row>
 </template>
@@ -58,6 +62,11 @@ export default {
             name: NAME.PRACTICE_RECORD
           })
           break;
+        case 'analysis':
+          this.$router.push({
+            name: NAME.ANALYSIS
+          })
+          break
         default:
           break;
       }

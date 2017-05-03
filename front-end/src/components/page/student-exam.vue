@@ -102,16 +102,16 @@ export default {
     }
   },
 
-  beforeRouteLeave (to, from, next) {
-    if(confirm('现在离开会自动提交结果哦！') == true){
-      console.log('leave')
-      this.ok();
-      next();
-    }else {
-      console.log('dont leave')
-      next(false);
-    }
-  },
+  // beforeRouteLeave (to, from, next) {
+  //   if(confirm('现在离开会自动提交结果哦！') == true){
+  //     console.log('leave')
+  //     this.autoSubmit();
+  //     next();
+  //   }else {
+  //     console.log('dont leave')
+  //     next(false);
+  //   }
+  // },
 
   methods: {
     fetchData () {
