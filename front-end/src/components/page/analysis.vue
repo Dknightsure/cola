@@ -100,8 +100,6 @@ export default {
         self.pies.push(tmp);
       })
 
-      console.log(self.pies);
-
       var data = {
           labels: labels,
           datasets: [
