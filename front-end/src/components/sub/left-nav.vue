@@ -34,6 +34,7 @@ h1 {
             </template>
             <Menu-item name="paper-list">考试卷</Menu-item>
             <Menu-item name="practice-paper-list">练习卷</Menu-item>
+            <Menu-item name="auto-paper">自动组卷</Menu-item>
         </Submenu>
         <Submenu name="add">
             <template slot="title">
@@ -108,6 +109,11 @@ export default {
         case 'practice-paper-list':
           this.$router.push({
             name: NAME.PRACTICE_PAPER_LIST
+          })
+          break;
+        case 'auto-paper':
+          this.$router.push({
+            name: NAME.AUTOPAPER
           })
           break;
         default:

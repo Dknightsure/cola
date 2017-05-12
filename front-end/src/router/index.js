@@ -18,6 +18,7 @@ import StudentPractice from '@/components/page/student-practice'
 import PracticePaperList from '@/components/page/practice-paper-list'
 import SearchQuestion from '@/components/page/search-question'
 import Analysis from '@/components/page/analysis'
+import AutoPaper from '@/components/page/auto-paper'
 
 import NAME from './name'
 
@@ -96,5 +97,9 @@ export default new Router({
     path: '/analysis',
     name: NAME.ANALYSIS,
     component: Analysis
+  }, {
+    path: '/auto-paper',
+    name: NAME.AUTOPAPER,
+    component: AutoPaper
   }]
 })

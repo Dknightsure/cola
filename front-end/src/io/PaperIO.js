@@ -174,4 +174,14 @@ PaperIO.prototype.getPracticeResult = function (data) {
   })
 }
 
+PaperIO.prototype.autoPaper = function (data) {
+  let obj = this.api.autoPaper;
+
+  return this.axios({
+    method: obj.method,
+    url: obj.url,
+    data: data
+  })
+}
+
 export default PaperIO

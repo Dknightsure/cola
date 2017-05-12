@@ -18,5 +18,6 @@ export default {
   PRACTICE_RECORD: 'practice-record',
   STUDENT_PRACTICE: 'student-practice',
   SEARCH_QUESTION: 'search-question',
-  ANALYSIS: 'analysis'
+  ANALYSIS: 'analysis',
+  AUTOPAPER: 'auto-paper'
 }

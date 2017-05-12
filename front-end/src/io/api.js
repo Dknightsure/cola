@@ -171,5 +171,10 @@ export default {
   search: {
     url: '/api/search',
     method: 'POST'
+  },
+
+  autoPaper: {
+    url: '/api/auto-paper',
+    method: 'POST'
   }
 }
