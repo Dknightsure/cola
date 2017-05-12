@@ -900,7 +900,7 @@ router.post('/api/get-practice-record', function (req, res, next) {
 })
 
 router.post('/api/search', function (req, res, next) {
-  var searchValue = req.body.searchValue;
+  var searchValue = req.body.title;
   var reg = new RegExp(searchValue);
 
   var querySingle = new Promise(function (resolve, reject) {

@@ -68,8 +68,17 @@
                     <div class="layout-content-main">
                         <Row>
                             <Col span="8" offset="8">
-                                <Input v-model="searchValue" placeholder="请输入搜索内容..." style="width: 300px"></Input>
-                                <Button type="primary" @click="search" icon="ios-search">搜索</Button>
+                                <Form :label-width="80" class="container">
+                                    <Form-item label="题目">
+                                        <Input v-model="title" placeholder="请输入搜索内容..." style="width: 300px"></Input>
+                                    </Form-item>
+                                    <Form-item label="难度区间">
+                                        <Input-number :max="5" :min="1" v-model="min"></Input-number>—<Input-number :max="5" :min="1" v-model="max"></Input-number>
+                                    </Form-item>
+                                    <Form-item>
+                                        <Button type="primary" @click="search" icon="ios-search">搜索</Button>
+                                    </Form-item>
+                                </Form>
                             </Col>
                         </Row>
                         <single-query v-for="(question, index) in result.singleQuestions" :question="question" :key="index"></single-query>
@@ -97,7 +106,9 @@ import SearchIO from '../../io/SearchIO'
 export default {
   data () {
     return {
-      searchValue: null,
+      title: null,
+      min: 0,
+      max: 5,
       result: {}
     }
   },
@@ -105,7 +116,12 @@ export default {
   methods: {
     search () {
       const self = this;
-      new SearchIO().search({searchValue: self.searchValue}).then(res => {
+      const postData = {
+          title: self.title,
+          min: self.min,
+          max: self.max
+      }
+      new SearchIO().search(postData).then(res => {
         self.result = res.data;
         var num = self.result.singleQuestions.length + self.result.mutipleQuestions.length + self.result.blankQuestions.length + self.result.judgementQuestions.length
         self.$Message.success('搜索到 ' + num + ' 条结果！');
