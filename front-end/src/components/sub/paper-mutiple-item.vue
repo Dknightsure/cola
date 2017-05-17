@@ -43,6 +43,9 @@
           <Form-item label="正确答案">
               {{ answer }}
           </Form-item>
+          <Form-item label="题目分数" v-if="question.score">
+              {{ question.score }}
+          </Form-item>
         </Form>
       </Card>
     </Col>

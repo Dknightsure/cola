@@ -91,7 +91,13 @@ ul {
         <Input v-model.number="makeup" placeholder="补考次数" :disabled="type == 'practice'" class="paper-input"></Input>
         <ul>
           <li v-for="(question, index) in questions" :key="index">
-            分数：<Input class="score" v-model.number="question.score" :disabled="type == 'practice'"></Input>
+            分数：
+            <template v-if="question.type === 'blank'">
+              <Input class="score" v-for="(score, index) in question.score" v-model.number="question.score[index]" :disabled="type == 'practice'" :key="index"></Input>
+            </template>
+            <template v-else>
+              <Input class="score" v-model.number="question.score" :disabled="type == 'practice'"></Input>
+            </template>
             题目：{{ question.title }}
             <div @click="deleteQuestion(index)">
               <Icon type="trash-a" color="#ff0000" size="20" class="icon-delete"></Icon>
@@ -126,7 +132,14 @@ export default {
     listenAddQuestion () {
       const self = this;
       Bus.$on('addQuestionToPaper', (question) => {
-        question.score = 10;
+        if(question.type === 'blank'){
+          question.score = []
+          for(let i = 0; i < question.selections.length; i++){
+            question.score.push(5);
+          }
+        }else{
+          question.score = 10;
+        }
         self.questions.push(question);
         self.$Message.success('添加到试卷成功！')
       })

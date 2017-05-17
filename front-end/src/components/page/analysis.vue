@@ -82,10 +82,12 @@ export default {
         })
 
         exam.blankQuestions.forEach(question => {
-          if(question.result === true){
-            tmp.blank += question.score
-          }else{
-            tmp.lost += question.score
+          for(let i = 0; i < question.score.length; i++){
+            if(question.result[i] === true){
+              tmp.blank += question.score[i];
+            }else{
+              tmp.lost += question.score[i];
+            }
           }
         })
 

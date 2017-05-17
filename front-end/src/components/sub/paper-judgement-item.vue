@@ -30,6 +30,9 @@
           <Form-item label="正确答案">
               {{ question.answer == 0 ? '否' : '是' }}
           </Form-item>
+          <Form-item label="题目分数" v-if="question.score">
+              {{ question.score }}
+          </Form-item>
         </Form>
       </Card>
     </Col>

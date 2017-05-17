@@ -4,7 +4,7 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;
 //创建数据库连接
-var db = mongoose.connect('mongodb://localhost:27017/cola');
+var db = mongoose.connect('mongodb://localhost:27017/cola-test');
 
 //检查是否连接成功
 db.connection.on("error", function (error) {
@@ -67,7 +67,7 @@ var PaperBlankQuestionSchema = new mongoose.Schema({
   selections: [SelectionSchema],
   difficulty: { type: Number },
   type: { type: String },
-  score: { type: Number }
+  score: { type: Array }
 });
 
 var JudgementQuestionSchema = new mongoose.Schema({
@@ -128,8 +128,8 @@ var ExamMutipleAnswer = new mongoose.Schema({
 var ExamBlankAnswer = new mongoose.Schema({
   questionId: { type: String },
   selections: [SelectionSchema],
-  result: { type: Boolean },
-  score: { type: Number }
+  result: { type: Array },
+  score: { type: Array }
 })
 
 var ExamJudgementAnswer = new mongoose.Schema({
@@ -654,12 +654,17 @@ router.post('/api/add-exam-answer', function (req, res, next) {
       }
 
       for (let i = 0; i < exam.blankQuestions.length; i++) {
-        paperScore += exam.blankQuestions[i].score;
-        if (JSON.stringify(exam.blankQuestions[i].selections) == JSON.stringify(paper.blankQuestions[i].selections)) {
-          exam.blankQuestions[i].result = true;
-          examScore += exam.blankQuestions[i].score;
-        } else {
-          exam.blankQuestions[i].result = false;
+        for (let j = 0; j < exam.blankQuestions[i].score.length; j++) {
+          paperScore += exam.blankQuestions[i].score[j];
+        }
+
+        for (let n = 0; n < exam.blankQuestions[i].selections.length; n++) {
+          if (exam.blankQuestions[i].selections[n].title === paper.blankQuestions[i].selections[n].title) {
+            examScore += exam.blankQuestions[i].score[n];
+            exam.blankQuestions[i].result[n] = true;
+          } else {
+            exam.blankQuestions[i].result[n] = false;
+          }
         }
       }
 
