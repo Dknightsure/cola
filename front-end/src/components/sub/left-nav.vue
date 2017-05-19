@@ -34,7 +34,7 @@ h1 {
             </template>
             <Menu-item name="paper-list">考试卷</Menu-item>
             <Menu-item name="practice-paper-list">练习卷</Menu-item>
-            <Menu-item name="auto-paper">自动组卷</Menu-item>
+            <Menu-item name="auto-paper">Excel 组卷</Menu-item>
         </Submenu>
         <Submenu name="add">
             <template slot="title">

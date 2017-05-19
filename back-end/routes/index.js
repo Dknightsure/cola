@@ -1,5 +1,9 @@
 var express = require('express');
+var multer = require('multer');
+var parseExcel = require('./parse-excel.js');
 var router = express.Router();
+
+var upload = multer({ dest: '../../uploads/' });
 
 var mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;
@@ -959,6 +963,33 @@ router.post('/api/search', function (req, res, next) {
     console.log(err);
   })
 
+})
+
+router.post('/excel-paper', upload.single('file'), function (req, res, next) {
+  console.log(req.file.path)
+
+  parseExcel(req.file.path, function (paper) {
+    var p = new PaperModel({
+      name: paper.name,
+      date: +new Date,
+      time: paper.time,
+      makeup: paper.makeup
+    });
+
+    p.singleQuestions = paper.singleQuestions;
+    p.mutipleQuestions = paper.mutipleQuestions;
+    p.blankQuestions = paper.blankQuestions;
+    p.judgementQuestions = paper.judgementQuestions;
+
+    p.save(function (err, ques) {
+      if (err) {
+        console.log(err);
+        res.json('fail');
+      } else {
+        res.json('success');
+      }
+    });
+  })
 })
 
 

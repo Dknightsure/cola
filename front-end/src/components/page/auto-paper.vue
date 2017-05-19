@@ -68,30 +68,15 @@
                     <div class="layout-content-main">
                         <Row>
                           <Col span="8" offset="8">
-                              <Form :label-width="80" class="container">
-                                  <Form-item label="试卷题目">
-                                      <Input v-model="title" placeholder="请输入试卷题目..." style="width: 300px"></Input>
-                                  </Form-item>
-                                  <Form-item label="单选题目数">
-                                      <Input-number v-model="singleNum"></Input-number> 每题分数：<Input-number v-model="singleScore"></Input-number>
-                                  </Form-item>
-                                  <Form-item label="多选题目数">
-                                      <Input-number v-model="mutipleNum"></Input-number> 每题分数：<Input-number v-model="mutipleScore"></Input-number>
-                                  </Form-item>
-                                  <Form-item label="填空题目数">
-                                      <Input-number v-model="blankNum"></Input-number> 每题分数：<Input-number v-model="blankScore"></Input-number>
-                                  </Form-item>
-                                  <Form-item label="判断题目数">
-                                      <Input-number v-model="judgementNum"></Input-number> 每题分数：<Input-number v-model="judgementScore"></Input-number>
-                                  </Form-item>
-                                  <Form-item label="平均难度">
-                                     <Input-number v-model="difficulty" :min="1" :max="5"></Input-number>
-                                  </Form-item>
-                                  <Form-item>
-                                     <Button type="primary" @click="auto">自动组卷</Button>
-                                     <Button type="primary" @click="isModalVisible = true">上传 Excel 组卷</Button>
-                                  </Form-item>
-                              </Form>
+                             <Upload
+                                multiple
+                                type="drag"
+                                action="http://localhost:3000/excel-paper">
+                                <div style="padding: 20px 0">
+                                    <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                                    <p>点击或将文件拖拽到这里上传</p>
+                                </div>
+                            </Upload>
                           </Col>
                         </Row>
                     </div>
@@ -101,20 +86,6 @@
                 </div>
             </i-col>
         </Row>
-        <Modal
-          v-model="isModalVisible"
-          title="上传组卷"
-          @on-ok="ok">
-          <Upload
-              multiple
-              type="drag"
-              action="/excel-paper">
-              <div style="padding: 20px 0">
-                  <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-                  <p>点击或将文件拖拽到这里上传</p>
-              </div>
-          </Upload>
-      </Modal>
     </div>
 </template>
 <script>
@@ -125,17 +96,6 @@ import PaperIO from '../../io/PaperIO'
 export default {
   data () {
     return {
-      title: '',
-      singleNum: 0,
-      singleScore: 10,
-      mutipleNum: 0,
-      mutipleScore: 10,
-      blankNum: 0,
-      blankScore: 10,
-      judgementNum: 0,
-      judgementScore: 10,
-      difficulty: 1,
-      isModalVisible: false
     }
   },
 
@@ -143,31 +103,7 @@ export default {
   },
 
   methods: {
-    auto () {
-      const self = this
-      const postData = {
-        title: this.title,
-        singleNum: this.singleNum,
-        singleScore: this.singleScore,
-        mutipleNum: this.mutipleNum,
-        mutipleScore: this.mutipleScore,
-        blankNum: this.blankNum,
-        blankScore: this.blankScore,
-        judgementNum: this.judgementNum,
-        judgementScore: this.judgementScore,
-        difficulty: this.difficulty
-      }
-
-      new PaperIO().autoPaper(postData).then( res => {
-        self.$Message.success('自动组卷成功');
-      }).catch( err => {
-        self.$Message.error('自动组卷失败');
-      })
-    },
-
-    ok () {
-      console.log('ok')
-    }
+    
   },
 
   components: {
