@@ -72,9 +72,6 @@
                                     <Form-item label="题目">
                                         <Input v-model="title" placeholder="请输入搜索内容..." style="width: 300px"></Input>
                                     </Form-item>
-                                    <Form-item label="难度区间">
-                                        <Input-number :max="5" :min="1" v-model="min"></Input-number>—<Input-number :max="5" :min="1" v-model="max"></Input-number>
-                                    </Form-item>
                                     <Form-item>
                                         <Button type="primary" @click="search" icon="ios-search">搜索</Button>
                                     </Form-item>

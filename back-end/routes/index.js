@@ -8,7 +8,7 @@ var upload = multer({ dest: '../../uploads/' });
 var mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;
 //创建数据库连接
-var db = mongoose.connect('mongodb://localhost:27017/cola-test');
+var db = mongoose.connect('mongodb://localhost:27017/cola');
 
 //检查是否连接成功
 db.connection.on("error", function (error) {

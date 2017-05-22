@@ -23,9 +23,7 @@
     </div>
     <div v-for="(item, index) in paper.blankQuestions" :key="index">
       <blank-item :question="item"></blank-item>
-      <Alert :type="exam.blankQuestions[index].result ? 'success': 'error'" show-icon>
-        <span slot="desc">你的答案：{{ exam.blankQuestions[index].selections | blankAnswer }}</span>
-      </Alert>
+      <blank-alter :results="exam.blankQuestions[index].result" :selections="exam.blankQuestions[index].selections"></blank-alter>
     </div>
     <div v-for="(item, index) in paper.judgementQuestions" :key="index">
       <blank-item :question="item"></blank-item>
@@ -43,6 +41,7 @@ import SingleItem from './paper-single-item'
 import MutipleItem from './paper-mutiple-item'
 import BlankItem from './paper-blank-item'
 import JudgementItem from './paper-judgement-item'
+import BlankAlter from './exam-result-blank-answer.vue'
 
 export default {
   data () {
@@ -72,7 +71,8 @@ export default {
     SingleItem,
     MutipleItem,
     BlankItem,
-    JudgementItem
+    JudgementItem,
+    BlankAlter
   }
 }
 </script>
